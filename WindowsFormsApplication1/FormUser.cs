@@ -111,5 +111,10 @@ namespace WindowsFormsApplication1
             }
             
         }
+
+        private void txtPassword_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+        }
     }
 }
