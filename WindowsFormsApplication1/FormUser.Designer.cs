@@ -75,11 +75,14 @@
             // 
             // txtUser
             // 
+            this.txtUser.Enabled = false;
             this.txtUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtUser.Location = new System.Drawing.Point(116, 89);
+            this.txtUser.MaxLength = 25;
             this.txtUser.Name = "txtUser";
             this.txtUser.Size = new System.Drawing.Size(234, 29);
             this.txtUser.TabIndex = 0;
+            this.txtUser.Text = "FredNero";
             // 
             // pictureBox1
             // 
@@ -95,10 +98,13 @@
             // 
             this.txtPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtPassword.Location = new System.Drawing.Point(116, 124);
+            this.txtPassword.MaxLength = 25;
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(234, 29);
             this.txtPassword.TabIndex = 1;
+            this.txtPassword.Text = "98443733Fred";
+            this.txtPassword.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPassword_KeyPress);
             // 
             // lbPassword
             // 

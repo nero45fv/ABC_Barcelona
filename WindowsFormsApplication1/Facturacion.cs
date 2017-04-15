@@ -18,10 +18,10 @@ namespace WindowsFormsApplication1
         private DataGridView dataGVDetallesFact;
 
         private ConecDBmySql dataBase;
-        public DataTable data_Descuento;
+        //public DataTable data_Descuento;
         private DataTable data_iva;
         private int id_Iva;
-        private int id_empleado;
+        private String id_empleado;
         // private DataGridViewTextBoxColumn colcodigo;
 
         #region Variables groupCliente
@@ -48,7 +48,7 @@ namespace WindowsFormsApplication1
         private Label lb_valorSubTotal;
         private Label lb_descuento;
         private Label lb_valorDescuento;
-        private ComboBox cb_listDescuento;
+        private TextBox txtDescuento;
         private Label lb_iva;
         private Label lb_valorIva;
         private Label lb_total;
@@ -61,7 +61,7 @@ namespace WindowsFormsApplication1
 
             #region inicializacion de Objetos
             this.dataBase = DataBase;
-            this.data_Descuento = new DataTable();
+            //this.data_Descuento = new DataTable();
             this.data_iva = new DataTable();
             this.pantalla = new Panel();
             this.groupCliente = new GroupBox();
@@ -134,6 +134,8 @@ namespace WindowsFormsApplication1
             this.txtRucCliente.Name = "txtRucCliente";
             this.txtRucCliente.Location = new Point(this.lbRucCliente.Location.X + this.lbRucCliente.Size.Width + separacion, this.lbRucCliente.Location.Y - 4);
             this.txtRucCliente.Size = new Size((ancho / 3) - this.lbRucCliente.Size.Width, altoObjetos);
+            this.txtRucCliente.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtNumero_KeyPress);
+            this.txtRucCliente.MaxLength = 13;
 
             this.btBuscarCI.Name = "btBuscarCI";
             this.btBuscarCI.Text = "Buscar por Ruc o CI";
@@ -148,6 +150,8 @@ namespace WindowsFormsApplication1
             this.txtNomCliente.Name = "txtNomCliente";
             this.txtNomCliente.Location = new Point(this.lbNomCliente.Location.X + this.lbNomCliente.Size.Width + separacion, this.lbNomCliente.Location.Y - 4);
             this.txtNomCliente.Size = new Size((ancho / 3) - this.lbNomCliente.Size.Width, altoObjetos);
+            this.txtRucCliente.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtNumero_KeyPress);
+            this.txtRucCliente.MaxLength = 13;
 
             this.btBuscarNombre.Name = "btBuscarNombre";
             this.btBuscarNombre.Text = "Buscar por Nombre";
@@ -210,7 +214,7 @@ namespace WindowsFormsApplication1
             this.lbFactura.Location = new Point(this.lbVerFecha.Location.X + this.lbVerFecha.Size.Width + separacion, poinYfecha);
             this.lbFactura.Size = new Size(160, this.lbfecha.Size.Height + 3);
 
-            this.lbNumeroFactura.Name = "lbVerFecha";
+            this.lbNumeroFactura.Name = "lbNumFactua";
             this.lbNumeroFactura.Text = "000-000-000";
             this.lbNumeroFactura.Font = new Font(this.FuenteLeta.Name, tamañoFontSize, FontStyle.Regular);
             this.lbNumeroFactura.Location = new Point(this.lbFactura.Location.X + this.lbFactura.Size.Width, poinYfecha);
@@ -225,7 +229,49 @@ namespace WindowsFormsApplication1
             this.dataGVDetallesFact.Name = "dataGVDetallesFact";
             this.dataGVDetallesFact.Location = new Point(this.groupCliente.Location.X, this.groupCliente.Location.Y + this.groupCliente.Size.Height + 10);
             this.dataGVDetallesFact.Size = new Size(this.groupCliente.Size.Width, (this.pantalla.Size.Height - this.dataGVDetallesFact.Location.Y) - this.groupCliente.Size.Height);
+            //this.dataGVDetallesFact.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtNumero_KeyPress);
 
+            if (dataGVDetallesFact.Columns.Count.Equals(0))
+
+            {
+                DataGridViewTextBoxColumn idProdu = new DataGridViewTextBoxColumn();
+                idProdu.HeaderText = "Codigo";
+                idProdu.Name = "id_bodegaProdutos";
+                idProdu.Width = 75;
+                idProdu.MaxInputLength = 5;
+                
+
+
+                DataGridViewTextBoxColumn CantidaProdu = new DataGridViewTextBoxColumn();
+                CantidaProdu.HeaderText = "Cantidad";
+                CantidaProdu.Name = "cantidad";
+                CantidaProdu.Width = 75;
+                CantidaProdu.MaxInputLength = 5;
+
+                DataGridViewTextBoxColumn PrecioUProdu = new DataGridViewTextBoxColumn();
+                PrecioUProdu.HeaderText = "Precio Unitario";
+                PrecioUProdu.Name = "precioUnitario";
+                PrecioUProdu.Width = 175;
+                PrecioUProdu.ReadOnly = true;
+
+                DataGridViewTextBoxColumn PrecioTProdu = new DataGridViewTextBoxColumn();
+                PrecioTProdu.HeaderText = "Precio Final";
+                PrecioTProdu.Name = "precioTotal";
+                PrecioTProdu.Width = 175;
+                PrecioTProdu.ReadOnly = true;
+
+                DataGridViewTextBoxColumn nombreProdu = new DataGridViewTextBoxColumn();
+                nombreProdu.HeaderText = "Producto";
+                nombreProdu.Name = "nombre";
+                nombreProdu.Width = dataGVDetallesFact.Size.Width - idProdu.Width - CantidaProdu.Width - PrecioUProdu.Width - PrecioTProdu.Width;
+                nombreProdu.ReadOnly = true;
+
+                dataGVDetallesFact.Columns.Add(idProdu);
+                dataGVDetallesFact.Columns.Add(nombreProdu);
+                dataGVDetallesFact.Columns.Add(CantidaProdu);
+                dataGVDetallesFact.Columns.Add(PrecioUProdu);
+                dataGVDetallesFact.Columns.Add(PrecioTProdu);
+            }
             #endregion
 
             #region Informacion de Factura 
@@ -236,7 +282,7 @@ namespace WindowsFormsApplication1
             this.lb_valorSubTotal = new Label();
             this.lb_descuento = new Label();
             this.lb_valorDescuento = new Label();
-            this.cb_listDescuento = new ComboBox();
+            this.txtDescuento = new TextBox();
             this.lb_iva = new Label();
             this.lb_valorIva = new Label();
             this.lb_total = new Label();
@@ -254,7 +300,7 @@ namespace WindowsFormsApplication1
             this.infoFactura.Controls.Add(this.lb_valorSubTotal);
             this.infoFactura.Controls.Add(this.lb_descuento);
             this.infoFactura.Controls.Add(this.lb_valorDescuento);
-            this.infoFactura.Controls.Add(this.cb_listDescuento);
+            this.infoFactura.Controls.Add(this.txtDescuento);
             this.infoFactura.Controls.Add(this.lb_iva);
             this.infoFactura.Controls.Add(this.lb_valorIva);
             this.infoFactura.Controls.Add(this.lb_total);
@@ -295,18 +341,18 @@ namespace WindowsFormsApplication1
             this.lb_valorDescuento.ForeColor = Color.DarkBlue;
             this.lb_valorDescuento.Font = this.lb_subTotal.Font;
 
-            this.cb_listDescuento.Name = "cb_listDescuento";
-            this.cb_listDescuento.Text = "0%";
-            this.cb_listDescuento.Location = new Point(this.lb_valorDescuento.Location.X + this.lb_valorDescuento.Size.Width + separacionIF, margenIF - 4);
-            this.cb_listDescuento.AutoSize = true;
-            this.cb_listDescuento.ForeColor = Color.DarkBlue;
-            this.cb_listDescuento.Font = this.lb_subTotal.Font;
-            this.cb_listDescuento.DropDownStyle = ComboBoxStyle.DropDownList;
-            this.cb_listDescuento.FlatStyle = FlatStyle.Popup;
+            this.txtDescuento.Name = "txtDescuento";
+            this.txtDescuento.Text = "0%";
+            this.txtDescuento.Location = new Point(this.lb_valorDescuento.Location.X + this.lb_valorDescuento.Size.Width + separacionIF, margenIF - 4);
+            this.txtDescuento.AutoSize = true;
+            this.txtDescuento.ForeColor = Color.DarkBlue;
+            this.txtDescuento.Font = this.lb_subTotal.Font;
+            this.txtDescuento.ReadOnly = true;
+
 
             this.lb_iva.Name = "lb_iva";
             this.lb_iva.Text = "Iva ";
-            this.lb_iva.Location = new Point(this.cb_listDescuento.Location.X + this.cb_listDescuento.Size.Width + separacionIF, margenIF);
+            this.lb_iva.Location = new Point(this.txtDescuento.Location.X + this.txtDescuento.Size.Width + separacionIF, margenIF);
             this.lb_iva.AutoSize = true;
             this.lb_iva.Font = this.lb_subTotal.Font;
 
@@ -353,11 +399,51 @@ namespace WindowsFormsApplication1
 
         }
 
+        private void TxtNumero_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (Char.IsNumber(e.KeyChar))//Al pulsar una numero
+            {
+                e.Handled = false;//Se acepta (todo OK)
+            }
+            else if (Char.IsControl(e.KeyChar))//Al pulsar teclas como Borrar y eso.
+            {
+                e.Handled = false;//Se acepta (todo OK)
+            }
+            //else if (Char.IsSeparator(e.KeyChar))//Al pulsar teclas como Espaarador y Espacio
+            //{
+            //    e.Handled = false;//Se acepta (todo OK)
+            //}
+            else//Para todo lo demas
+            {
+                e.Handled = true;//No se acepta (si pulsas cualquier otra cosa pues no se envia)
+            }
+        }
+
+        private void TxtLetras_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (Char.IsLetter(e.KeyChar))//Al pulsar una letra
+            {
+                e.Handled = false;//Se acepta (todo OK)
+            }
+            else if (Char.IsControl(e.KeyChar))//Al pulsar teclas como Borrar y eso.
+            {
+                e.Handled = false;//Se acepta (todo OK)
+            }
+            else if (Char.IsSeparator(e.KeyChar))//Al pulsar teclas como Espaarador y Espacio
+            {
+                e.Handled = false;//Se acepta (todo OK)
+            }
+            else//Para todo lo demas
+            {
+                e.Handled = true;//No se acepta (si pulsas cualquier otra cosa pues no se envia)
+            }
+        }
+
         public void VerPantallaFacturacion(DataTable Empleado)
         {
             
-            String consulta = "SELECT id_descuento,`descuento%` as Descuento,descuentoDecimal FROM abc_barcelona.tb_descuento;";
-            this.cb_listDescuento.DataSource = this.dataBase.getColumnString(consulta, this.data_Descuento, "Descuento");
+            //String consulta = "SELECT id_descuento,`descuento%` as Descuento,descuentoDecimal FROM abc_barcelona.tb_descuento;";
+            //this.cb_listDescuento.DataSource = this.dataBase.getColumnString(consulta, this.data_Descuento, "Descuento");
 
             String consulta1 = "SELECT id_iva,`iva%` as Iva,ivaDecimal FROM abc_barcelona.tb_iva where valido = true;";
             this.dataBase.GetDataTabla(consulta1, this.data_iva);
@@ -380,7 +466,7 @@ namespace WindowsFormsApplication1
             {
                 foreach (DataColumn column in Empleado.Columns)
                 {
-                    this.id_empleado = (int)row["id_empleado"];
+                    this.id_empleado = row["id_cedulaEmpleado"].ToString();
                     this.lb_nombreEmpreado.Text = row["nombre"].ToString() +" "+ row["apellido"].ToString();
                 }
             }

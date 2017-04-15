@@ -25,7 +25,7 @@ namespace WindowsFormsApplication1
             this.dataTablaUser = new DataTable();
             
             
-            String consulta = "select id_user,nomUser as User,claveUser as Clave,titulo as Titulo,id_privilegios " +
+            String consulta = "select id_cedulaEmpleado,nomUser as User,claveUser as Clave,titulo as Titulo,id_privilegios " +
                               "from tb_user, tb_previlegios where tb_user.id_privilegios = tb_previlegios.id_previlegios;";
             this.DataBase.GetDataTabla(consulta, this.dataTablaUser);
             if(this.DataBase.Error != null) {
@@ -53,8 +53,8 @@ namespace WindowsFormsApplication1
                          "from tb_previlegios where "+ row["id_privilegios"].ToString() + " = tb_previlegios.id_previlegios;";
                         this.DataBase.GetDataTabla(consulta, this.dataPermisos);
 
-                        String consulta1 = "SELECT id_empleado,nom1Emple as nombre,apel1Emple as apellido,id_user " +
-                                            "FROM abc_barcelona.tb_empleado where id_user = "+ row["id_user"].ToString() + ";" ;
+                        String consulta1 = "SELECT id_cedulaEmpleado,nom1Emple as nombre,apel1Emple as apellido " +
+                                            "FROM abc_barcelona.tb_empleado where id_cedulaEmpleado = "+ row["id_cedulaEmpleado"].ToString() + ";" ;
                              this.DataBase.GetDataTabla(consulta1, this.dataEmpleado);
                              valido = true;
                              break;
