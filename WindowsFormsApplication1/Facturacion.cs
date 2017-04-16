@@ -150,8 +150,7 @@ namespace WindowsFormsApplication1
             this.txtNomCliente.Name = "txtNomCliente";
             this.txtNomCliente.Location = new Point(this.lbNomCliente.Location.X + this.lbNomCliente.Size.Width + separacion, this.lbNomCliente.Location.Y - 4);
             this.txtNomCliente.Size = new Size((ancho / 3) - this.lbNomCliente.Size.Width, altoObjetos);
-            this.txtRucCliente.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtNumero_KeyPress);
-            this.txtRucCliente.MaxLength = 13;
+            this.txtNomCliente.Enabled = false;
 
             this.btBuscarNombre.Name = "btBuscarNombre";
             this.btBuscarNombre.Text = "Buscar por Nombre";
@@ -202,7 +201,7 @@ namespace WindowsFormsApplication1
             this.lbfecha.Size = new Size(100, this.lbfecha.Size.Height + 3);
 
             this.lbVerFecha.Name = "lbVerFecha";
-            this.lbVerFecha.Text = "10-Febrero-2017";
+            this.lbVerFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
             this.lbVerFecha.Font = new Font(this.FuenteLeta.Name, tamañoFontSize, FontStyle.Regular);
             this.lbVerFecha.Location = new Point(this.lbfecha.Location.X + this.lbfecha.Size.Width, poinYfecha);
             this.lbVerFecha.Size = new Size(200, this.lbfecha.Size.Height);
@@ -400,7 +399,7 @@ namespace WindowsFormsApplication1
         }
 
         private void TxtNumero_KeyPress(object sender, KeyPressEventArgs e)
-        {
+        { 
             if (Char.IsNumber(e.KeyChar))//Al pulsar una numero
             {
                 e.Handled = false;//Se acepta (todo OK)
