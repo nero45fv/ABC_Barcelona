@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.bt_Cancelar = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dgv_productos = new System.Windows.Forms.DataGridView();
             this.rb_BuscarCodigo = new System.Windows.Forms.RadioButton();
             this.rb_BuscarNombre = new System.Windows.Forms.RadioButton();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_productos)).BeginInit();
             this.SuspendLayout();
             // 
             // bt_Cancelar
@@ -45,14 +45,17 @@
             this.bt_Cancelar.TabIndex = 0;
             this.bt_Cancelar.Text = "Cancelar";
             this.bt_Cancelar.UseVisualStyleBackColor = true;
+            this.bt_Cancelar.Click += new System.EventHandler(this.bt_Cancelar_Click);
             // 
-            // dataGridView1
+            // dgv_productos
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 50);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(732, 319);
-            this.dataGridView1.TabIndex = 1;
+            this.dgv_productos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_productos.Location = new System.Drawing.Point(12, 50);
+            this.dgv_productos.Name = "dgv_productos";
+            this.dgv_productos.Size = new System.Drawing.Size(732, 319);
+            this.dgv_productos.TabIndex = 1;
+            this.dgv_productos.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_productos_CellDoubleClick);
+            this.dgv_productos.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.dgv_productos_MouseDoubleClick);
             // 
             // rb_BuscarCodigo
             // 
@@ -92,13 +95,14 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.rb_BuscarNombre);
             this.Controls.Add(this.rb_BuscarCodigo);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.dgv_productos);
             this.Controls.Add(this.bt_Cancelar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "FormBuscProducto";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_productos)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -107,7 +111,7 @@
         #endregion
 
         private System.Windows.Forms.Button bt_Cancelar;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dgv_productos;
         private System.Windows.Forms.RadioButton rb_BuscarCodigo;
         private System.Windows.Forms.RadioButton rb_BuscarNombre;
         private System.Windows.Forms.TextBox textBox1;

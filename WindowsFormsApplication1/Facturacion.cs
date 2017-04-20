@@ -16,6 +16,11 @@ namespace WindowsFormsApplication1
         private GroupBox groupCliente;
         private Font FuenteLeta;
         private DataGridView dataGVDetallesFact;
+        private ContextMenuStrip menuContextual;
+        private ToolStripMenuItem agregarProductoTSMenuItem;
+        private ToolStripMenuItem eliminarProductoTSMenuItem;
+
+        private FormBuscProducto buscarProducto;
 
         private ConecDBmySql dataBase;
         //public DataTable data_Descuento;
@@ -68,7 +73,17 @@ namespace WindowsFormsApplication1
             this.FuenteLeta = new Font(groupCliente.Font.Name, groupCliente.Font.Size, groupCliente.Font.Style);
             this.dataGVDetallesFact = new DataGridView();
             this.infoFactura = new Panel();
+
+            this.menuContextual = new ContextMenuStrip();
+            this.agregarProductoTSMenuItem = new ToolStripMenuItem();
+            this.eliminarProductoTSMenuItem = new ToolStripMenuItem();
+
+            this.buscarProducto = new FormBuscProducto();
+            this.buscarProducto.DataBase = this.dataBase;
             #endregion
+
+
+
             Pantalla.Controls.Add(this.pantalla);
             this.pantalla.Location = ubicacion;
             this.pantalla.Size = tamaño;
@@ -229,7 +244,10 @@ namespace WindowsFormsApplication1
             this.dataGVDetallesFact.Location = new Point(this.groupCliente.Location.X, this.groupCliente.Location.Y + this.groupCliente.Size.Height + 10);
             this.dataGVDetallesFact.Size = new Size(this.groupCliente.Size.Width, (this.pantalla.Size.Height - this.dataGVDetallesFact.Location.Y) - this.groupCliente.Size.Height);
             //this.dataGVDetallesFact.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtNumero_KeyPress);
+            this.dataGVDetallesFact.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseClick);
+            this.dataGVDetallesFact.ContextMenuStrip = this.menuContextual;
 
+            #region add Columnas al dataGVDetallesFact
             if (dataGVDetallesFact.Columns.Count.Equals(0))
 
             {
@@ -271,6 +289,26 @@ namespace WindowsFormsApplication1
                 dataGVDetallesFact.Columns.Add(PrecioUProdu);
                 dataGVDetallesFact.Columns.Add(PrecioTProdu);
             }
+            #endregion
+
+            this.menuContextual.Name = "menuContextual";
+            this.menuContextual.Size = new System.Drawing.Size(169, 48);
+
+
+            this.menuContextual.Items.Add(agregarProductoTSMenuItem);
+            this.menuContextual.Items.Add(eliminarProductoTSMenuItem);
+
+
+            this.agregarProductoTSMenuItem.Name = "agregarProductoTSMenuItem";
+            this.agregarProductoTSMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.agregarProductoTSMenuItem.Text = "Agregar Producto";
+            this.agregarProductoTSMenuItem.Click += new System.EventHandler(this.agregarProductoTSMenuItem_Click);
+
+            this.eliminarProductoTSMenuItem.Name = "agregarProductoTSMenuItem";
+            this.eliminarProductoTSMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.eliminarProductoTSMenuItem.Text = "Eliminar Producto";
+            this.eliminarProductoTSMenuItem.Click += new System.EventHandler(this.eliminarProductoTSMenuItem_Click);
+
             #endregion
 
             #region Informacion de Factura 
@@ -398,6 +436,18 @@ namespace WindowsFormsApplication1
 
         }
 
+        private void agregarProductoTSMenuItem_Click(object sender, EventArgs e)
+        {
+            this.buscarProducto.ShowDialog();
+        }
+
+        private void eliminarProductoTSMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+
         private void TxtNumero_KeyPress(object sender, KeyPressEventArgs e)
         {
             char s = e.KeyChar;
@@ -437,6 +487,28 @@ namespace WindowsFormsApplication1
             {
                 e.Handled = true;//No se acepta (si pulsas cualquier otra cosa pues no se envia)
             }
+        }
+
+        private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+
+        {
+
+            if (e.Button == MouseButtons.Right && e.RowIndex > -1)
+            {
+                //para poner todos las Filas(rows) en Falso para evitar una una fila no selecionada 
+                foreach (DataGridViewRow dr in this.dataGVDetallesFact.SelectedRows)
+                { dr.Selected = false; }
+
+                // Para seleccionar
+
+                dataGVDetallesFact.Rows[e.RowIndex].Selected = true;
+
+                // Para mostrar el menú
+
+                this.menuContextual.Show(this.pantalla.Left + this.dataGVDetallesFact.Left + e.X, this.pantalla.Top + this.dataGVDetallesFact.Top + e.Y);
+
+            }
+
         }
 
         public void VerPantallaFacturacion(DataTable Empleado)
