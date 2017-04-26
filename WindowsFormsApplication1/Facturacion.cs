@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -19,8 +20,11 @@ namespace WindowsFormsApplication1
         private ContextMenuStrip menuContextual;
         private ToolStripMenuItem agregarProductoTSMenuItem;
         private ToolStripMenuItem eliminarProductoTSMenuItem;
+        private ToolStripMenuItem editarProductoTSMenuItem;
+        private ToolStripMenuItem buscarProductoTSMenuItem;
 
         private FormBuscProducto buscarProducto;
+        private FormProducto producto;
 
         private ConecDBmySql dataBase;
         //public DataTable data_Descuento;
@@ -77,9 +81,14 @@ namespace WindowsFormsApplication1
             this.menuContextual = new ContextMenuStrip();
             this.agregarProductoTSMenuItem = new ToolStripMenuItem();
             this.eliminarProductoTSMenuItem = new ToolStripMenuItem();
+            this.editarProductoTSMenuItem = new ToolStripMenuItem();
+            this.buscarProductoTSMenuItem = new ToolStripMenuItem();
 
             this.buscarProducto = new FormBuscProducto();
             this.buscarProducto.DataBase = this.dataBase;
+
+            this.producto = new FormProducto();
+            this.producto.DataBase = this.dataBase;
             #endregion
 
 
@@ -244,8 +253,9 @@ namespace WindowsFormsApplication1
             this.dataGVDetallesFact.Location = new Point(this.groupCliente.Location.X, this.groupCliente.Location.Y + this.groupCliente.Size.Height + 10);
             this.dataGVDetallesFact.Size = new Size(this.groupCliente.Size.Width, (this.pantalla.Size.Height - this.dataGVDetallesFact.Location.Y) - this.groupCliente.Size.Height);
             //this.dataGVDetallesFact.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtNumero_KeyPress);
-            this.dataGVDetallesFact.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseClick);
-            this.dataGVDetallesFact.ContextMenuStrip = this.menuContextual;
+            //this.dataGVDetallesFact.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellClick);
+            this.dataGVDetallesFact.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dataGridView1_MouseClick);
+            //this.dataGVDetallesFact.ContextMenuStrip = this.menuContextual;
 
             #region add Columnas al dataGVDetallesFact
             if (dataGVDetallesFact.Columns.Count.Equals(0))
@@ -295,16 +305,27 @@ namespace WindowsFormsApplication1
             this.menuContextual.Size = new System.Drawing.Size(169, 48);
 
 
+            this.menuContextual.Items.Add(buscarProductoTSMenuItem);
             this.menuContextual.Items.Add(agregarProductoTSMenuItem);
+            this.menuContextual.Items.Add(editarProductoTSMenuItem);
             this.menuContextual.Items.Add(eliminarProductoTSMenuItem);
 
+            this.buscarProductoTSMenuItem.Name = "agregarProductoTSMenuItem";
+            this.buscarProductoTSMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.buscarProductoTSMenuItem.Text = "Buscar Producto";
+            this.buscarProductoTSMenuItem.Click += new System.EventHandler(this.buscarProductoTSMenuItem_Click);
 
             this.agregarProductoTSMenuItem.Name = "agregarProductoTSMenuItem";
             this.agregarProductoTSMenuItem.Size = new System.Drawing.Size(168, 22);
             this.agregarProductoTSMenuItem.Text = "Agregar Producto";
             this.agregarProductoTSMenuItem.Click += new System.EventHandler(this.agregarProductoTSMenuItem_Click);
 
-            this.eliminarProductoTSMenuItem.Name = "agregarProductoTSMenuItem";
+            this.editarProductoTSMenuItem.Name = "editarProductoTSMenuItem";
+            this.editarProductoTSMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.editarProductoTSMenuItem.Text = "Editar Producto";
+            this.editarProductoTSMenuItem.Click += new System.EventHandler(this.editarProductoTSMenuItem_Click);
+
+            this.eliminarProductoTSMenuItem.Name = "eliminarProductoTSMenuItem";
             this.eliminarProductoTSMenuItem.Size = new System.Drawing.Size(168, 22);
             this.eliminarProductoTSMenuItem.Text = "Eliminar Producto";
             this.eliminarProductoTSMenuItem.Click += new System.EventHandler(this.eliminarProductoTSMenuItem_Click);
@@ -436,13 +457,63 @@ namespace WindowsFormsApplication1
 
         }
 
+        private void editarProductoTSMenuItem_Click(object sender, EventArgs e)
+        {
+            int numFila = 0;
+            foreach (DataGridViewRow dr in this.dataGVDetallesFact.Rows)
+            {
+                if (dr.Selected == true)
+                {
+                    int codigo = (int)this.dataGVDetallesFact.Rows[numFila].Cells[0].Value;
+
+                    this.producto.llenarTxt(codigo);
+                    this.producto.ShowDialog();
+
+                    if (this.producto.aceptado)
+                    { this.dataGVDetallesFact.Rows.Add(this.producto.getDatos().ToArray()); }
+                }
+                else { numFila++; }
+            }
+
+        }
+
         private void agregarProductoTSMenuItem_Click(object sender, EventArgs e)
         {
+            this.producto.ShowDialog();
+
+            if (this.producto.aceptado)
+            { this.dataGVDetallesFact.Rows.Add(this.producto.getDatos().ToArray()); }
+        }
+
+        private void buscarProductoTSMenuItem_Click(object sender, EventArgs e)
+        {
             this.buscarProducto.ShowDialog();
+            
+            if (this.buscarProducto.producEncotrado)
+            {
+                this.producto.cargarDatos(this.buscarProducto.dataProductos);
+                this.producto.ShowDialog();
+
+                if (this.producto.aceptado)
+                { this.dataGVDetallesFact.Rows.Add(this.producto.getDatos().ToArray()); }
+            }
         }
 
         private void eliminarProductoTSMenuItem_Click(object sender, EventArgs e)
         {
+            Int32 rowToDelete = -1;
+            int numFila = 0; 
+            foreach (DataGridViewRow dr in this.dataGVDetallesFact.Rows)
+            {
+                if (dr.Selected == true)
+                {
+                    rowToDelete = numFila;
+                    break;
+                }
+                else { numFila++; }
+            }
+            if (rowToDelete > -1)
+            { this.dataGVDetallesFact.Rows.RemoveAt(rowToDelete);}
 
         }
 
@@ -489,11 +560,12 @@ namespace WindowsFormsApplication1
             }
         }
 
-        private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        //private void dataGridView1_CellClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void dataGridView1_MouseClick(object sender, MouseEventArgs e)
 
         {
-
-            if (e.Button == MouseButtons.Right && e.RowIndex > -1)
+            int positionMouseRow = this.dataGVDetallesFact.HitTest(e.X, e.Y).RowIndex;
+            if (e.Button == MouseButtons.Right && positionMouseRow > -1 /*&& !(e.RowIndex == this.dataGVDetallesFact.RowCount - 1)*/)
             {
                 //para poner todos las Filas(rows) en Falso para evitar una una fila no selecionada 
                 foreach (DataGridViewRow dr in this.dataGVDetallesFact.SelectedRows)
@@ -501,12 +573,12 @@ namespace WindowsFormsApplication1
 
                 // Para seleccionar
 
-                dataGVDetallesFact.Rows[e.RowIndex].Selected = true;
+                dataGVDetallesFact.Rows[positionMouseRow].Selected = true;
 
                 // Para mostrar el menú
 
-                this.menuContextual.Show(this.pantalla.Left + this.dataGVDetallesFact.Left + e.X, this.pantalla.Top + this.dataGVDetallesFact.Top + e.Y);
-
+                this.menuContextual.Show(this.dataGVDetallesFact,new Point(e.X,e.Y));
+                
             }
 
         }

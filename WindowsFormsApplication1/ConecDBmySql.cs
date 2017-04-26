@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -17,17 +18,17 @@ namespace WindowsFormsApplication1
         public string Server { get; private set; }
         public string UserID { get; private set; }
         public string Password { get; private set; }
-        public string DataBase { get; private set; }
+        public string BaseDatos { get; private set; }
 
 
 
-        public ConecDBmySql(String Server, String UserID, String Password, String DataBase)
+        public ConecDBmySql(String Server, String UserID, String Password, String BaseDatos)
         {
             MySqlConnectionStringBuilder datosDelServidor = new MySqlConnectionStringBuilder();
             datosDelServidor.Server = this.Server = Server;
             datosDelServidor.UserID = this.UserID = UserID;
             datosDelServidor.Password = this.Password = Password;
-            datosDelServidor.Database = this.DataBase = DataBase;
+            datosDelServidor.Database = this.BaseDatos = BaseDatos;
             try {
                 this.Error = null;
                 this.dbConn = new MySqlConnection(datosDelServidor.ToString());
@@ -63,52 +64,91 @@ namespace WindowsFormsApplication1
             catch (MySqlException e) { this.Error = e.ToString(); }
         }
 
-        public  List <String> getColumnString(string selectCommand, DataTable DataTable,String nameColumn)
+        public ArrayList getColumn(string selectCommand, DataTable DataTable,String nameColumn)
         {
-            List<String> columna = new List<string>();
+            ArrayList columna = new ArrayList();
 
             GetDataTabla(selectCommand, DataTable);
             foreach (DataRow row in DataTable.Rows)
-            {
-                String col = row[nameColumn].ToString();
-                columna.Add(col);
-            }
+            { columna.Add(row[nameColumn]); }
             return columna;
         }
 
-        public List<String> getColumnString( DataTable DataTable, String nameColumn)
+        public ArrayList getColumn( DataTable DataTable, String nameColumn)
         {
-            List<String> columna = new List<string>();
+            ArrayList columna = new ArrayList();
             
             foreach (DataRow row in DataTable.Rows)
-            {
-                String col = row[nameColumn].ToString();
-                columna.Add(col);
-            }
+            { columna.Add(row[nameColumn]); }
             return columna;
         }
 
-        //public List<String> getFilaString(string selectCommand, DataTable DataTable, int numFila)
-        //{
-        //    List<String> columna = new List<string>();
+        public ArrayList getColumn(string selectCommand, String nameColumn)
+        {
+            ArrayList columna = new ArrayList();
+            DataTable dataTable = new DataTable();
 
-        //    GetDataTabla(selectCommand, DataTable);
-        //    foreach (DataRow row in DataTable.Rows)
-        //    {
-        //        String col = row[nameColumn].ToString();
-        //        columna.Add(col);
-        //    }
+            GetDataTabla(selectCommand, dataTable);
+            foreach (DataRow row in dataTable.Rows)
+            { columna.Add(row[nameColumn]); }
+            return columna;
+        }
 
-        //    //foreach (DataRow row in table.Rows)
-        //    //{
-        //    //    foreach (DataColumn column in table.Columns)
-        //    //    {
-        //    //        Console.WriteLine(row[column]);
-        //    //    }
-        //    //}
+        public ArrayList getRow(string selectCommand, DataTable DataTable, int numFila)
+        {
+            ArrayList Fila = new ArrayList();
 
-        //    return columna;
-        //}
+            GetDataTabla(selectCommand, DataTable);
+
+            foreach (DataRow row in DataTable.Rows)
+            {
+                if (DataTable.Rows.Count == numFila)
+                {
+                    foreach (DataColumn column in DataTable.Columns)
+                    {
+                        Fila.Add(row[column]);
+                    }
+                    if (Fila.Count >= 0) { break; }
+                }
+            }
+
+            //foreach (DataRow row in table.Rows)
+            //{
+            //    foreach (DataColumn column in table.Columns)
+            //    {
+            //        Console.WriteLine(row[column]);
+            //    }
+            //}
+
+            return Fila;
+        }
+
+        public ArrayList getRow(string selectCommand)
+        {
+            ArrayList Fila = new ArrayList();
+            DataTable dataTable = new DataTable();
+
+            GetDataTabla(selectCommand, dataTable);
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                foreach (DataColumn column in dataTable.Columns)
+                {
+                    Fila.Add(row[column]);
+                }
+                if (Fila.Count >= 0) { break; }
+            }
+
+            //foreach (DataRow row in table.Rows)
+            //{
+            //    foreach (DataColumn column in table.Columns)
+            //    {
+            //        Console.WriteLine(row[column]);
+            //    }
+            //}
+
+            return Fila;
+        }
 
         //public List<String> getFilaString(DataTable DataTable, String nameColumn)
         //{

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,80 +13,85 @@ namespace WindowsFormsApplication1
 {
     public partial class FormBuscProducto : Form
     {
-        public List<string> dataProducto;
+        public ArrayList dataProductos;
+        public bool producEncotrado;
+
+        //dataProducto dataProduc;
+
         internal ConecDBmySql DataBase
         { get; set; }
 
         public FormBuscProducto()
         {
             InitializeComponent();
-            this.dataProducto = new List<string>();
+            #region add Columnas al dataGVDetallesFact
+            if (this.dgv_productos.Columns.Count.Equals(0))
+
+            {
+                DataGridViewTextBoxColumn idProdu = new DataGridViewTextBoxColumn();
+                idProdu.HeaderText = "Codigo";
+                idProdu.Name = "id_bodegaProdutos";
+                idProdu.Width = 50;
+                idProdu.ReadOnly = true;
+
+                DataGridViewTextBoxColumn CantidaProdu = new DataGridViewTextBoxColumn();
+                CantidaProdu.HeaderText = "Cantidad";
+                CantidaProdu.Name = "cantiBodega";
+                CantidaProdu.Width = 50;
+                CantidaProdu.ReadOnly = true;
+
+                DataGridViewTextBoxColumn PrecioUProdu = new DataGridViewTextBoxColumn();
+                PrecioUProdu.HeaderText = "Precio Unitario";
+                PrecioUProdu.Name = "precioUnitario";
+                PrecioUProdu.Width = 175;
+                PrecioUProdu.ReadOnly = true;
+
+                DataGridViewTextBoxColumn nombreProdu = new DataGridViewTextBoxColumn();
+                nombreProdu.HeaderText = "Producto";
+                nombreProdu.Name = "nombre";
+                nombreProdu.Width = dgv_productos.Size.Width - idProdu.Width - CantidaProdu.Width - PrecioUProdu.Width;
+                nombreProdu.ReadOnly = true;
+
+                dgv_productos.Columns.Add(idProdu);
+                dgv_productos.Columns.Add(CantidaProdu);
+                dgv_productos.Columns.Add(nombreProdu);
+                dgv_productos.Columns.Add(PrecioUProdu);
+            }
+            #endregion
         }
-        
+
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            this.producEncotrado = false;
         }
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            String comando = "";
             if (Char.IsNumber(e.KeyChar))//Al pulsar una numero
             {
                 e.Handled = false; //Se acepta (todo OK)
-                if (this.rb_BuscarCodigo.Checked)
-                {
-                    this.textBox1.MaxLength = 13;
-                    comando = "SELECT id_bodegaProdutos as Codigo,cantidad as Cantidad,nombre as Nombre,precioVentPubli as PrecioUnitario " +
-                                "FROM abc_barcelona.tb_bodegaprodutos WHERE id_bodegaProdutos like '%" + this.textBox1.Text + "%';";
-                }
-                llenarDGV(comando);
+                this.textBox1.MaxLength = 13;
+                llenarDGV();
             }
             else if (Char.IsControl(e.KeyChar))//Al pulsar teclas como Borrar y eso.
             {
                 e.Handled = false;//Se acepta (todo OK)
-                if (this.rb_BuscarNombre.Checked)
-                {
-                    this.textBox1.MaxLength = 50;
-                    comando = "SELECT id_bodegaProdutos as Codigo,cantidad as Cantidad,nombre as Nombre,precioVentPubli as PrecioUnitario " +
-                               "FROM abc_barcelona.tb_bodegaprodutos WHERE nombre like '%" + this.textBox1.Text + "%';";
-                }
-                else if (this.rb_BuscarCodigo.Checked)
-                {
-                    this.textBox1.MaxLength = 13;
-                    comando = "SELECT id_bodegaProdutos as Codigo,cantidad as Cantidad,nombre as Nombre,precioVentPubli as PrecioUnitario " +
-                                "FROM abc_barcelona.tb_bodegaprodutos WHERE id_bodegaProdutos like '%" + this.textBox1.Text + "%';";
-                }
-                llenarDGV(comando);
+                this.textBox1.MaxLength = 50;
+                llenarDGV();
             }
             else if (Char.IsSeparator(e.KeyChar))//Al pulsar teclas como Espaarador y Espacio
             {
                 e.Handled = false;//Se acepta (todo OK) 
-                if (this.rb_BuscarNombre.Checked)
-                {
-                    this.textBox1.MaxLength = 50;
-                    comando = "SELECT id_bodegaProdutos as Codigo,cantidad as Cantidad,nombre as Nombre,precioVentPubli as PrecioUnitario " +
-                               "FROM abc_barcelona.tb_bodegaprodutos WHERE nombre like '%" + this.textBox1.Text + "%';";
-                }
-                else if (this.rb_BuscarCodigo.Checked)
-                {
-                    this.textBox1.MaxLength = 13;
-                    comando = "SELECT id_bodegaProdutos as Codigo,cantidad as Cantidad,nombre as Nombre,precioVentPubli as PrecioUnitario " +
-                                "FROM abc_barcelona.tb_bodegaprodutos WHERE id_bodegaProdutos like '%" + this.textBox1.Text + "%';";
-                }
-                llenarDGV(comando);
+                this.textBox1.MaxLength = 50;
+                llenarDGV();
             }
             else if (Char.IsLetter(e.KeyChar))//Al pulsar teclas como Espaarador y Espacio
             {
                 e.Handled = false;//Se acepta (todo OK)
-                if (this.rb_BuscarNombre.Checked)
-                {
-                    this.textBox1.MaxLength = 50;
-                    comando = "SELECT id_bodegaProdutos as Codigo,cantidad as Cantidad,nombre as Nombre,precioVentPubli as PrecioUnitario " +
-                               "FROM abc_barcelona.tb_bodegaprodutos WHERE nombre like '%" + this.textBox1.Text + "%';";
-                }
-                llenarDGV(comando);
+                this.textBox1.MaxLength = 50;
+                
+                llenarDGV();
             }
             else//Para todo lo demas
             {
@@ -93,16 +99,23 @@ namespace WindowsFormsApplication1
             }
         }
 
-        private void llenarDGV(String comando)
+        private void llenarDGV()
         {
-            DataTable DataTable = new DataTable();
-            DataTable.Locale = System.Globalization.CultureInfo.InvariantCulture;
-            BindingSource tem = new BindingSource();
-            this.dgv_productos.DataSource = tem;
-            
-            this.DataBase.GetDataTabla(comando, DataTable);
+           String comando = "SELECT id_bodegaProdutos as Codigo,cantidad as Cantidad,nombre as Nombre,precioVentPubli as PrecioUnitario " +
+                               "FROM abc_barcelona.tb_bodegaprodutos WHERE id_bodegaProdutos like '%" + this.textBox1.Text + "%';";
 
-            tem.DataSource = DataTable;
+            DataTable dataTable = new DataTable();
+            this.DataBase.GetDataTabla(comando, dataTable);
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                ArrayList newRow = new ArrayList();
+                foreach (DataColumn column in dataTable.Columns)
+                {
+                    newRow.Add( row[column]);
+                }
+                dgv_productos.Rows.Add(newRow.ToArray());
+            }
         }
 
 
@@ -133,29 +146,35 @@ namespace WindowsFormsApplication1
         private void bt_Cancelar_Click(object sender, EventArgs e)
         {
             this.Hide();
+            this.producEncotrado = false;
         }
 
         private void dgv_productos_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             //comando = "SELECT id_bodegaProdutos as Codigo,cantidad as Cantidad,nombre as Nombre,precioVentPubli as PrecioUnitario " +
             //                   "FROM abc_barcelona.tb_bodegaprodutos WHERE id_bodegaProdutos like '%" + this.textBox1.Text + "%';";
-
-            if ((e.RowIndex > -1))
+            //dataProduc = new dataProducto();
+            this.dataProductos = new ArrayList();
+            if (e.RowIndex > -1&& !(e.RowIndex==this.dgv_productos.RowCount-1) )
             {
                 //obtienes la fila seleccionada
-                this.dataProducto.Add(dgv_productos.Rows[e.RowIndex].Cells["Codigo"].Value.ToString());
-                this.dataProducto.Add(dgv_productos.Rows[e.RowIndex].Cells["Cantidad"].Value.ToString());
-                this.dataProducto.Add(dgv_productos.Rows[e.RowIndex].Cells["Nombre"].Value.ToString());
-                this.dataProducto.Add(dgv_productos.Rows[e.RowIndex].Cells["PrecioUnitario"].Value.ToString());
-                this.bt_Cancelar_Click(sender, e);
+                for (Int32 index = 0; index < dgv_productos.Rows[e.RowIndex].Cells.Count; index++)
+                {
+                    dataProductos.Add( dgv_productos.Rows[e.RowIndex].Cells[index].Value);
+                }
+
+                //this.dataProduc.id = (int)dgv_productos.Rows[e.RowIndex].Cells["Codigo"].Value;
+                //this.dataProduc.cantidad = (int)dgv_productos.Rows[e.RowIndex].Cells["Cantidad"].Value;
+                //this.dataProduc.nombre =dgv_productos.Rows[e.RowIndex].Cells["Nombre"].Value.ToString();
+                //this.dataProduc.precioU = (float)dgv_productos.Rows[e.RowIndex].Cells["PrecioUnitario"].Value;
+                this.Hide();
+                this.producEncotrado = true;
             }
         }
 
-        private void dgv_productos_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void label1_Click(object sender, EventArgs e)
         {
 
         }
-
-        
     }
 }
