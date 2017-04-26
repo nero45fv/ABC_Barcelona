@@ -479,6 +479,7 @@ namespace WindowsFormsApplication1
 
         private void agregarProductoTSMenuItem_Click(object sender, EventArgs e)
         {
+            this.producto.limpiarTextbox();
             this.producto.ShowDialog();
 
             if (this.producto.aceptado)

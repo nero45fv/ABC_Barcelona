@@ -70,28 +70,41 @@ namespace WindowsFormsApplication1
         {
             if (Char.IsNumber(e.KeyChar))//Al pulsar una numero
             {
+                String tem = this.textBox1.Text + e.KeyChar;
                 e.Handled = false; //Se acepta (todo OK)
-                this.textBox1.MaxLength = 13;
-                llenarDGV();
+                this.textBox1.MaxLength = 50;
+                if (tem != "")
+                { llenarDGV(tem); }
+                
             }
             else if (Char.IsControl(e.KeyChar))//Al pulsar teclas como Borrar y eso.
             {
-                e.Handled = false;//Se acepta (todo OK)
+                String tem = "";
+                e.Handled = false; //Se acepta (todo OK)
+                Char[] ArrayTemp = this.textBox1.Text.ToCharArray();
                 this.textBox1.MaxLength = 50;
-                llenarDGV();
+                for (int i = 0; i < ArrayTemp.Length - 1; i++)
+                {
+                    tem = tem + ArrayTemp[i];
+                }
+                if (tem.Length != 0)
+                { llenarDGV(tem); }
             }
             else if (Char.IsSeparator(e.KeyChar))//Al pulsar teclas como Espaarador y Espacio
             {
+                String tem = this.textBox1.Text + e.KeyChar;
                 e.Handled = false;//Se acepta (todo OK) 
                 this.textBox1.MaxLength = 50;
-                llenarDGV();
+                if (tem != "")
+                { llenarDGV(tem); }
             }
             else if (Char.IsLetter(e.KeyChar))//Al pulsar teclas como Espaarador y Espacio
             {
+                String tem = this.textBox1.Text + e.KeyChar;
                 e.Handled = false;//Se acepta (todo OK)
                 this.textBox1.MaxLength = 50;
-                
-                llenarDGV();
+                if (tem != "")
+                { llenarDGV(tem); }
             }
             else//Para todo lo demas
             {
@@ -99,10 +112,12 @@ namespace WindowsFormsApplication1
             }
         }
 
-        private void llenarDGV()
+        private void llenarDGV(String Buscar)
         {
            String comando = "SELECT id_bodegaProdutos as Codigo,cantidad as Cantidad,nombre as Nombre,precioVentPubli as PrecioUnitario " +
-                               "FROM abc_barcelona.tb_bodegaprodutos WHERE id_bodegaProdutos like '%" + this.textBox1.Text + "%';";
+                               "FROM abc_barcelona.tb_bodegaprodutos WHERE nombre like '%" + Buscar + "%';";
+
+            limpiarDGVProductos();
 
             DataTable dataTable = new DataTable();
             this.DataBase.GetDataTabla(comando, dataTable);
@@ -118,6 +133,17 @@ namespace WindowsFormsApplication1
             }
         }
 
+        private void limpiarDGVProductos()
+        {
+            if (this.dgv_productos.RowCount > 1)
+            {
+                int limite = this.dgv_productos.RowCount;
+                for (int i = 0; i < limite-1; i++)
+                {
+                    this.dgv_productos.Rows.RemoveAt(0);
+                }
+            }
+        }
 
         //private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
 

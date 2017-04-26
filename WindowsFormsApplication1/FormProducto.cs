@@ -22,20 +22,34 @@ namespace WindowsFormsApplication1
         public FormProducto()
         {
             InitializeComponent();
-            this.rowFila = new ArrayList();
         }
 
         private void txtCodigio_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (Char.IsNumber(e.KeyChar))//Al pulsar una numero
             {
+                String tem = this.txtCodigio.Text + e.KeyChar;
                 e.Handled = false; //Se acepta (todo OK)
-                llenarTxt();
+
+                if (tem != "")
+                { llenarTxt(tem); }
+
             }
             else if (Char.IsControl(e.KeyChar))//Al pulsar teclas como Borrar y eso.
             {
-                e.Handled = false;//Se acepta (todo OK)
-                llenarTxt();
+                String tem = "";
+                e.Handled = false; //Se acepta (todo OK)
+                if(this.txtCodigio.Text.Length != 0)
+                {
+                    Char[] ArrayTemp = this.txtCodigio.Text.ToCharArray();
+
+                    for (int i = 0; i < ArrayTemp.Length - 1; i++)
+                    { tem = tem + ArrayTemp[i]; }
+
+                    if (tem.Length != 0)
+                    { llenarTxt(tem); }
+                }
+                
             }
             else//Para todo lo demas
             {
@@ -43,25 +57,38 @@ namespace WindowsFormsApplication1
             }
         }
 
-        private void llenarTxt()
+        public void limpiarTextbox()
         {
-          String  comando = "SELECT id_bodegaProdutos as Codigo, cantidad as Cantidad,nombre as Nombre,precioVentPubli as PrecioUnitario " +
-                          "FROM abc_barcelona.tb_bodegaprodutos WHERE id_bodegaProdutos = " + this.txtCodigio.Text + ";";
+            this.txtCodigio.Enabled = true;
+            this.txtCodigio.ReadOnly = false;
+            this.txtCodigio.Text = "";
+            this.txtCantiB.Text = "";
+            this.txtNombre.Text = "";
+            this.txtCantidad.Text = "";
+            this.lbPrecioU.Text = "$ 0.00";
+            this.txtPrecioT.Text = "";
+        }
+
+        private void llenarTxt(String Buscar)
+        {
+            this.rowFila = new ArrayList();
+            this.txtCodigio.Enabled = true;
+            this.txtCodigio.ReadOnly = false;
+            this.aceptado = false;
+            String  comando = "SELECT id_bodegaProdutos as Codigo, cantidad as Cantidad,nombre as Nombre,precioVentPubli as PrecioUnitario " +
+                          "FROM abc_barcelona.tb_bodegaprodutos WHERE id_bodegaProdutos = " + Buscar + ";";
             ArrayList row = this.DataBase.getRow(comando);
             if (row.Count > 0)
             {
-                llegarTextBox(row);
-                //this.txtCantiB.Text = this.rowFila.Add(row[1]).ToString();
-                //this.txtNombre.Text = this.rowFila.Add(row[2]).ToString();
-                //this.txtCantidad.Text = this.rowFila.Add(0).ToString();
-                //this.lbPrecioU.Text = this.rowFila.Add(row[3]).ToString();
-                //this.txtPrecioT.Text = this.rowFila.Add(0).ToString();
+                llegarTextBox(row,false);
             }
             
         }
 
         public void llenarTxt(int Codigo)
         {
+            this.rowFila = new ArrayList();
+            this.aceptado = false;
             String comando = "SELECT id_bodegaProdutos as Codigo, cantidad as Cantidad,nombre as Nombre,precioVentPubli as PrecioUnitario " +
                             "FROM abc_barcelona.tb_bodegaprodutos WHERE id_bodegaProdutos = " + Codigo + ";";
             ArrayList row = this.DataBase.getRow(comando);
@@ -69,24 +96,20 @@ namespace WindowsFormsApplication1
             {
                 this.txtCodigio.Enabled = false;
                 this.txtCodigio.ReadOnly = true;
-                llegarTextBox(row);
-                //this.txtCodigio.Text = this.rowFila.Add(row[0]).ToString();
-                //this.txtCantiB.Text = this.rowFila.Add(row[1]).ToString();
-                //this.txtNombre.Text = this.rowFila.Add(row[2]).ToString();
-                //this.txtCantidad.Text = this.rowFila.Add(0).ToString();
-                //this.lbPrecioU.Text = this.rowFila.Add(row[3]).ToString();
-                //this.txtPrecioT.Text = this.rowFila.Add(0).ToString();
+                llegarTextBox(row,true);
             }
         }
 
         public void cargarDatos(ArrayList row)
         {
+            this.rowFila = new ArrayList();
+            this.aceptado = false;
             this.txtCodigio.Enabled = false;
             this.txtCodigio.ReadOnly = true;
-            llegarTextBox(row);
+            llegarTextBox(row,true);
         }
 
-        private void llegarTextBox(ArrayList row)
+        private void llegarTextBox(ArrayList row,Boolean codigo)
         {
             this.rowFila.Add(row[0]).ToString();
             this.rowFila.Add(row[1]).ToString();
@@ -100,7 +123,7 @@ namespace WindowsFormsApplication1
                 switch (i)
                 {
                     case 0:
-                        this.txtCodigio.Text = this.rowFila[i].ToString();
+                        if (codigo) { this.txtCodigio.Text = this.rowFila[i].ToString(); }
                         break;
                     case 1:
                         this.txtCantiB.Text = this.rowFila[i].ToString();
@@ -147,7 +170,6 @@ namespace WindowsFormsApplication1
                 this.aceptado = true;
                 this.rowFila[3] = cantidad;
                 this.rowFila[5] = Convert.ToDouble(this.txtCantidad.Text, CultureInfo.CreateSpecificCulture("es-ES")) * Convert.ToDouble(rowFila[4].ToString(), CultureInfo.CreateSpecificCulture("es-ES"));
-                this.rowFila = new ArrayList();
                 this.Hide();
             }else
             { MessageBox.Show("Error: La Cantidad es mayor a la cantidad q hay en Bodega"); }
@@ -162,28 +184,50 @@ namespace WindowsFormsApplication1
                 e.Handled = false; //Se acepta (todo OK)
                 if (tem != "")
                 {
-                    Double canti = Convert.ToDouble(tem, CultureInfo.CreateSpecificCulture("es-ES"));
-                    Double precioU = Convert.ToDouble(rowFila[4], CultureInfo.CreateSpecificCulture("es-ES"));
-                    Double temp = canti * precioU;
+                    Decimal canti = Convert.ToDecimal(tem);
+                    Decimal precioU = Convert.ToDecimal(rowFila[4]);
+                    Decimal temp = canti * precioU;
                     this.txtPrecioT.Text = temp.ToString();
                 }
             }
             else if (Char.IsControl(e.KeyChar))//Al pulsar teclas como Borrar y eso.
             {
-                String tem = this.txtCantidad.Text + e.KeyChar;
+                String tem = "";
                 e.Handled = false; //Se acepta (todo OK)
-                //int i = tem
-                if (tem != "")
+                if (this.txtCantidad.Text.Length != 0)
                 {
-                    Double canti = Convert.ToDouble(tem, CultureInfo.CreateSpecificCulture("es-ES"));
-                    Double precioU = Convert.ToDouble(rowFila[4], CultureInfo.CreateSpecificCulture("es-ES"));
-                    Double temp = canti * precioU;
-                    this.txtPrecioT.Text = temp.ToString();
+                    Char[] ArrayTemp = this.txtCantidad.Text.ToCharArray();
+                    for (int i = 0; i < ArrayTemp.Length - 1; i++)
+                    {
+                        tem = tem + ArrayTemp[i];
+                    }
+                    if (tem.Length != 0)
+                    {
+                        Decimal canti = Convert.ToDecimal(tem);
+                        Decimal precioU = Convert.ToDecimal(rowFila[4]);
+                        Decimal temp = canti * precioU;
+                        this.txtPrecioT.Text = temp.ToString();
+                    }
+                    else
+                    {
+                        this.txtPrecioT.Text = "0";
+                    }
                 }
             }
             else if (e.KeyChar == '.')//Al pulsar teclas como Borrar y eso.
             {
-                e.Handled = false;//Se acepta (todo OK)
+                String tem = this.txtCantidad.Text + e.KeyChar;
+                if(tem.Length <= 1)
+                {
+                    e.Handled = true;//no acepta (todo OK)
+                }else
+                {
+                    Decimal canti = Convert.ToDecimal(tem);
+                    Decimal precioU = Convert.ToDecimal(rowFila[4]);
+                    Decimal temp = canti * precioU;
+                    this.txtPrecioT.Text = temp.ToString();
+                }
+                
             }
             else//Para todo lo demas
             {
