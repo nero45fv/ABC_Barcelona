@@ -64,13 +64,33 @@ namespace WindowsFormsApplication1
             catch (MySqlException e) { this.Error = e.ToString(); }
         }
 
+        public void ejecutaNoConsulta(string selectCommand)
+        {
+            try
+            {
+                this.Error = null;
+                // Se abre la conexion
+                this.dbConn.Open();
+
+                MySqlCommand mycomand = new MySqlCommand(selectCommand, dbConn);
+
+                mycomand.ExecuteNonQuery();
+
+                this.dbConn.Close();
+
+            }
+            catch (MySqlException e) { this.Error = e.ToString(); }
+        }
+
         public ArrayList getColumn(string selectCommand, DataTable DataTable,String nameColumn)
         {
             ArrayList columna = new ArrayList();
 
             GetDataTabla(selectCommand, DataTable);
+
             foreach (DataRow row in DataTable.Rows)
             { columna.Add(row[nameColumn]); }
+
             return columna;
         }
 
@@ -89,6 +109,7 @@ namespace WindowsFormsApplication1
             DataTable dataTable = new DataTable();
 
             GetDataTabla(selectCommand, dataTable);
+
             foreach (DataRow row in dataTable.Rows)
             { columna.Add(row[nameColumn]); }
             return columna;
@@ -105,9 +126,32 @@ namespace WindowsFormsApplication1
                 if (DataTable.Rows.Count == numFila)
                 {
                     foreach (DataColumn column in DataTable.Columns)
-                    {
-                        Fila.Add(row[column]);
-                    }
+                    {Fila.Add(row[column]); }
+                    if (Fila.Count >= 0) { break; }
+                }
+            }
+
+            //foreach (DataRow row in table.Rows)
+            //{
+            //    foreach (DataColumn column in table.Columns)
+            //    {
+            //        Console.WriteLine(row[column]);
+            //    }
+            //}
+
+            return Fila;
+        }
+
+        public ArrayList getRow( DataTable DataTable, int numFila)
+        {
+            ArrayList Fila = new ArrayList();
+
+            foreach (DataRow row in DataTable.Rows)
+            {
+                if (DataTable.Rows.Count == numFila)
+                {
+                    foreach (DataColumn column in DataTable.Columns)
+                    { Fila.Add(row[column]); }
                     if (Fila.Count >= 0) { break; }
                 }
             }

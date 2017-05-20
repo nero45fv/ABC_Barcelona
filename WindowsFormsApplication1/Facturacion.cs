@@ -25,6 +25,8 @@ namespace WindowsFormsApplication1
 
         private FormBuscProducto buscarProducto;
         private FormProducto producto;
+        private FormNewCliente newCliente;
+        private FormBuscCliente buscarCliente;
 
         private ConecDBmySql dataBase;
         //public DataTable data_Descuento;
@@ -32,6 +34,9 @@ namespace WindowsFormsApplication1
         private int id_Iva;
         private String id_empleado;
         // private DataGridViewTextBoxColumn colcodigo;
+        private ArrayList rowCliente;
+        private ArrayList descuento;
+
 
         #region Variables groupCliente
         private Label lbNomCliente;
@@ -84,14 +89,21 @@ namespace WindowsFormsApplication1
             this.editarProductoTSMenuItem = new ToolStripMenuItem();
             this.buscarProductoTSMenuItem = new ToolStripMenuItem();
 
+            #endregion
+
+            #region inicianto Form
             this.buscarProducto = new FormBuscProducto();
             this.buscarProducto.DataBase = this.dataBase;
 
             this.producto = new FormProducto();
             this.producto.DataBase = this.dataBase;
+
+            this.newCliente = new FormNewCliente();
+            this.newCliente.DataBase = this.dataBase;
+
+            this.buscarCliente = new FormBuscCliente();
+            this.buscarCliente.DataBase = this.dataBase;
             #endregion
-
-
 
             Pantalla.Controls.Add(this.pantalla);
             this.pantalla.Location = ubicacion;
@@ -158,7 +170,7 @@ namespace WindowsFormsApplication1
             this.txtRucCliente.Name = "txtRucCliente";
             this.txtRucCliente.Location = new Point(this.lbRucCliente.Location.X + this.lbRucCliente.Size.Width + separacion, this.lbRucCliente.Location.Y - 4);
             this.txtRucCliente.Size = new Size((ancho / 3) - this.lbRucCliente.Size.Width, altoObjetos);
-            this.txtRucCliente.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtNumero_KeyPress);
+            this.txtRucCliente.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCedula_KeyPress);
             this.txtRucCliente.MaxLength = 13;
 
             this.btBuscarCI.Name = "btBuscarCI";
@@ -423,7 +435,7 @@ namespace WindowsFormsApplication1
             
 
             this.lb_total.Name = "lb_total";
-            this.lb_total.Text = "Total";
+            this.lb_total.Text = "Total: $";
             this.lb_total.Location = new Point(this.lb_subTotal.Location.X + this.lb_subTotal.Size.Width + separacionIF, this.lb_subTotal.Location.Y + this.lb_subTotal.Size.Height + separacionIF);
             this.lb_total.AutoSize = true;
             this.lb_total.Font = new Font (this.FuenteLeta.FontFamily,this.FuenteLeta.Size+20f,FontStyle.Bold,this.FuenteLeta.Unit);
@@ -452,8 +464,6 @@ namespace WindowsFormsApplication1
 
 
             #endregion
-            //---------------------------------
-
 
         }
 
@@ -465,7 +475,7 @@ namespace WindowsFormsApplication1
                 if (dr.Selected == true)
                 {
                     int codigo = (int)this.dataGVDetallesFact.Rows[numFila].Cells[0].Value;
-
+                    this.dataGVDetallesFact.Rows.RemoveAt(numFila);
                     this.producto.llenarTxt(codigo);
                     this.producto.ShowDialog();
 
@@ -519,6 +529,75 @@ namespace WindowsFormsApplication1
         }
 
 
+        private void btImprimir_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btBuscarCliente_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btNewCliente_Click(object sender, EventArgs e)
+        {
+            this.newCliente.ShowDialog();
+            if (this.newCliente.Valido)
+            {
+                this.rowCliente = this.newCliente.dataCliente;
+                //this.descuento= this.newCliente
+            }
+        }
+
+        private void txtCedula_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char s = e.KeyChar;
+            if (Char.IsNumber(e.KeyChar))//Al pulsar una numero
+            {
+                String tem = this.txtRucCliente.Text + e.KeyChar;
+                e.Handled = false; //Se acepta (todo OK)
+                if (tem != "")
+                {
+                    //llenarDGV(tem);
+                }
+            }
+            else if (Char.IsControl(e.KeyChar))//Al pulsar teclas como Borrar y eso.
+            {
+                String tem = "";
+                e.Handled = false; //Se acepta (todo OK)
+                Char[] ArrayTemp = this.txtRucCliente.Text.ToCharArray();
+                this.txtRucCliente.MaxLength = 50;
+                for (int i = 0; i < ArrayTemp.Length - 1; i++)
+                {
+                    tem = tem + ArrayTemp[i];
+                }
+                if (tem.Length != 0)
+                {
+                    //llenarDGV(tem);
+                }
+            }
+            else//Para todo lo demas
+            {
+                e.Handled = true;//No se acepta (si pulsas cualquier otra cosa pues no se envia)
+            }
+        }
+
+        private void llenarTxt(String Buscar)
+        {
+            this.rowCliente = new ArrayList();
+            //this.txtCodigio.Enabled = true;
+            //this.txtCodigio.ReadOnly = false;
+            //this.aceptado = false;
+            String comando = "SELECT id_bodegaProdutos as Codigo, cantidad as Cantidad,nombre as Nombre,precioVentPubli as PrecioUnitario " +
+                          "FROM abc_barcelona.tb_cliente WHERE id_bodegaProdutos = " + Buscar + ";";
+            ArrayList row = this.dataBase.getRow(comando);
+            if (row.Count > 0)
+            {
+                //llegarTextBox(row, false);
+            }
+
+        }
+
 
         private void TxtNumero_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -561,7 +640,9 @@ namespace WindowsFormsApplication1
             }
         }
 
+
         //private void dataGridView1_CellClick(object sender, DataGridViewCellMouseEventArgs e)
+
         private void dataGridView1_MouseClick(object sender, MouseEventArgs e)
 
         {
