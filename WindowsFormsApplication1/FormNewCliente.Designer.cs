@@ -45,6 +45,10 @@
             this.cbTipoCliente = new System.Windows.Forms.ComboBox();
             this.txtEmail = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtCiudad = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.dtFechaNacimiento = new System.Windows.Forms.DateTimePicker();
             this.SuspendLayout();
             // 
             // lbRuc
@@ -61,7 +65,7 @@
             // 
             this.txtRuc.Location = new System.Drawing.Point(106, 55);
             this.txtRuc.Name = "txtRuc";
-            this.txtRuc.Size = new System.Drawing.Size(398, 20);
+            this.txtRuc.Size = new System.Drawing.Size(155, 20);
             this.txtRuc.TabIndex = 1;
             // 
             // btGuardar
@@ -200,12 +204,52 @@
             this.label3.TabIndex = 15;
             this.label3.Text = "Email:";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(280, 189);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(113, 13);
+            this.label4.TabIndex = 17;
+            this.label4.Text = "Fecha Nacimiento:";
+            this.label4.Click += new System.EventHandler(this.label4_Click);
+            // 
+            // txtCiudad
+            // 
+            this.txtCiudad.Location = new System.Drawing.Point(342, 55);
+            this.txtCiudad.Name = "txtCiudad";
+            this.txtCiudad.Size = new System.Drawing.Size(162, 20);
+            this.txtCiudad.TabIndex = 20;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(280, 58);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(50, 13);
+            this.label5.TabIndex = 19;
+            this.label5.Text = "Ciudad:";
+            // 
+            // dtFechaNacimiento
+            // 
+            this.dtFechaNacimiento.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtFechaNacimiento.Location = new System.Drawing.Point(406, 189);
+            this.dtFechaNacimiento.Name = "dtFechaNacimiento";
+            this.dtFechaNacimiento.Size = new System.Drawing.Size(98, 20);
+            this.dtFechaNacimiento.TabIndex = 21;
+            // 
             // FormNewCliente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.ClientSize = new System.Drawing.Size(519, 274);
+            this.Controls.Add(this.dtFechaNacimiento);
+            this.Controls.Add(this.txtCiudad);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.txtEmail);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.cbTipoCliente);
@@ -225,6 +269,7 @@
             this.Controls.Add(this.lbRuc);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "FormNewCliente";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "FormNewCliente";
             this.Load += new System.EventHandler(this.FormNewCliente_Load);
             this.ResumeLayout(false);
@@ -251,5 +296,9 @@
         private System.Windows.Forms.ComboBox cbTipoCliente;
         private System.Windows.Forms.TextBox txtEmail;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox txtCiudad;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.DateTimePicker dtFechaNacimiento;
     }
 }

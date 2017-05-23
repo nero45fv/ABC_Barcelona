@@ -15,8 +15,8 @@ namespace WindowsFormsApplication1
     {
         public ArrayList dataCliente;
         public bool producEncotrado;
-
         //dataProducto dataProduc;
+        public DataTable tablaDescuento;
 
         internal ConecDBmySql DataBase
         { get; set; }
@@ -114,8 +114,7 @@ namespace WindowsFormsApplication1
 
         private void llenarDGV(String Buscar)
         {
-           String comando = "SELECT id_bodegaProdutos as Codigo,cantidad as Cantidad,nombre as Nombre,precioVentPubli as PrecioUnitario " +
-                               "FROM abc_barcelona.tb_bodegaprodutos WHERE nombre like '%" + Buscar + "%';";
+           String comando = "SELECT * FROM abc_barcelona.tb_cliente WHERE nomCliente like '%" + Buscar + "%';";
 
             limpiarDGVProductos();
 
@@ -145,29 +144,6 @@ namespace WindowsFormsApplication1
             }
         }
 
-        //private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-
-        //{
-
-        //    if (e.Button == MouseButtons.Right && e.RowIndex > -1)
-        //    {
-        //        //para poner todos las Filas(rows) en Falso para evitar una una fila no selecionada 
-        //        foreach (DataGridViewRow dr in this.dgv_productos.SelectedRows)
-        //        { dr.Selected = false;}
-
-        //        // Para seleccionar
-
-        //        dgv_productos.Rows[e.RowIndex].Selected = true;
-
-        //        // Para mostrar el menú
-
-        //        this.menuContextual.Show(this.Left + this.dgv_productos.Left + e.X, this.Top + this.dgv_productos.Top + e.Y);
-
-        //    }
-
-        //}
-
-
 
         private void bt_Cancelar_Click(object sender, EventArgs e)
         {
@@ -177,22 +153,12 @@ namespace WindowsFormsApplication1
 
         private void dgv_productos_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            //comando = "SELECT id_bodegaProdutos as Codigo,cantidad as Cantidad,nombre as Nombre,precioVentPubli as PrecioUnitario " +
-            //                   "FROM abc_barcelona.tb_bodegaprodutos WHERE id_bodegaProdutos like '%" + this.textBox1.Text + "%';";
-            //dataProduc = new dataProducto();
-            this.dataCliente = new ArrayList();
+
             if (e.RowIndex > -1&& !(e.RowIndex==this.dgv_productos.RowCount-1) )
             {
-                //obtienes la fila seleccionada
-                for (Int32 index = 0; index < dgv_productos.Rows[e.RowIndex].Cells.Count; index++)
-                {
-                    dataCliente.Add( dgv_productos.Rows[e.RowIndex].Cells[index].Value);
-                }
+                String comando = "SELECT * FROM abc_barcelona.tb_cliente WHERE nomCliente like '%" + dgv_productos.Rows[e.RowIndex].Cells[0].Value + "%';";
+                this.dataCliente = this.DataBase.getRow(comando);
 
-                //this.dataProduc.id = (int)dgv_productos.Rows[e.RowIndex].Cells["Codigo"].Value;
-                //this.dataProduc.cantidad = (int)dgv_productos.Rows[e.RowIndex].Cells["Cantidad"].Value;
-                //this.dataProduc.nombre =dgv_productos.Rows[e.RowIndex].Cells["Nombre"].Value.ToString();
-                //this.dataProduc.precioU = (float)dgv_productos.Rows[e.RowIndex].Cells["PrecioUnitario"].Value;
                 this.Hide();
                 this.producEncotrado = true;
             }

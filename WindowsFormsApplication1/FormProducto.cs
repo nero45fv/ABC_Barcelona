@@ -169,7 +169,7 @@ namespace WindowsFormsApplication1
             {
                 this.aceptado = true;
                 this.rowFila[3] = cantidad;
-                this.rowFila[5] = Convert.ToDouble(this.txtCantidad.Text, CultureInfo.CreateSpecificCulture("es-ES")) * Convert.ToDouble(rowFila[4].ToString(), CultureInfo.CreateSpecificCulture("es-ES"));
+                this.rowFila[5] = Convert.ToDouble(this.txtPrecioT.Text/*, CultureInfo.CreateSpecificCulture("es-ES"))*/);
                 this.Hide();
             }else
             { MessageBox.Show("Error: La Cantidad es mayor a la cantidad q hay en Bodega"); }

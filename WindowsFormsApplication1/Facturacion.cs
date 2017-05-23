@@ -31,6 +31,8 @@ namespace WindowsFormsApplication1
         private ConecDBmySql dataBase;
         //public DataTable data_Descuento;
         private DataTable data_iva;
+        public DataTable tablaDescuento;
+
         private int id_Iva;
         private String id_empleado;
         // private DataGridViewTextBoxColumn colcodigo;
@@ -72,6 +74,7 @@ namespace WindowsFormsApplication1
 
         public Facturacion(Panel Pantalla, ConecDBmySql DataBase,Point ubicacion, Size tamaño)
         {
+           
 
             #region inicializacion de Objetos
             this.dataBase = DataBase;
@@ -92,6 +95,12 @@ namespace WindowsFormsApplication1
             #endregion
 
             #region inicianto Form
+            String consulta = "SELECT id_descuento,Categoria,`descuento%`,rangoMinimo,rangoMaximo FROM abc_barcelona.tb_descuento;";
+            this.tablaDescuento = new DataTable();
+            this.dataBase.GetDataTabla(consulta, this.tablaDescuento);
+            if (this.dataBase.Error != null)
+            { MessageBox.Show(this.dataBase.Error); }
+
             this.buscarProducto = new FormBuscProducto();
             this.buscarProducto.DataBase = this.dataBase;
 
@@ -100,9 +109,11 @@ namespace WindowsFormsApplication1
 
             this.newCliente = new FormNewCliente();
             this.newCliente.DataBase = this.dataBase;
+            this.newCliente.tablaDescuento = this.tablaDescuento;
 
             this.buscarCliente = new FormBuscCliente();
             this.buscarCliente.DataBase = this.dataBase;
+            this.buscarCliente.tablaDescuento = this.tablaDescuento;
             #endregion
 
             Pantalla.Controls.Add(this.pantalla);
@@ -188,11 +199,12 @@ namespace WindowsFormsApplication1
             this.txtNomCliente.Size = new Size((ancho / 3) - this.lbNomCliente.Size.Width, altoObjetos);
             this.txtNomCliente.Enabled = false;
 
-            this.btBuscarNombre.Name = "btBuscarNombre";
-            this.btBuscarNombre.Text = "Buscar por Nombre";
+            this.btBuscarNombre.Name = "btBuscarCliente";
+            this.btBuscarNombre.Text = "Buscar Cliente";
             this.btBuscarNombre.Location = new Point(this.txtNomCliente.Location.X + this.txtNomCliente.Size.Width + separacion, this.txtNomCliente.Location.Y);
             this.btBuscarNombre.Size = new Size(anchoBotones, altoObjetos);
             this.btBuscarNombre.BackColor = Color.White;
+            this.btBuscarNombre.Click += new System.EventHandler(this.btBuscarCliente_Click);
 
             this.lbFonoCliente.Name = "lbRucCliente";
             this.lbFonoCliente.Text = "Telefono:";
@@ -208,6 +220,7 @@ namespace WindowsFormsApplication1
             this.btNewCliente.Location = new Point(this.txtFonoCliente.Location.X + this.txtFonoCliente.Size.Width + separacion, this.txtFonoCliente.Location.Y);
             this.btNewCliente.Size = new Size(anchoBotones, altoObjetos);
             this.btNewCliente.BackColor = Color.White;
+            this.btNewCliente.Click += new System.EventHandler(this.btNewCliente_Click);
 
             this.lbDirecCliente.Name = "lbDirecCliente";
             this.lbDirecCliente.Text = "Direccion:";
@@ -536,7 +549,12 @@ namespace WindowsFormsApplication1
 
         private void btBuscarCliente_Click(object sender, EventArgs e)
         {
-
+            this.buscarCliente.ShowDialog();
+            if (this.buscarCliente.producEncotrado)
+            {
+                this.rowCliente = this.buscarCliente.dataCliente;
+                //this.descuento= this.newCliente
+            }
         }
 
         private void btNewCliente_Click(object sender, EventArgs e)
