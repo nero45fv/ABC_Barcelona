@@ -16,28 +16,20 @@ namespace WindowsFormsApplication1
         private Panel infoFactura;
         private GroupBox groupCliente;
         private Font FuenteLeta;
-        private DataGridView dataGVDetallesFact;
-        private ContextMenuStrip menuContextual;
-        private ToolStripMenuItem agregarProductoTSMenuItem;
-        private ToolStripMenuItem eliminarProductoTSMenuItem;
-        private ToolStripMenuItem editarProductoTSMenuItem;
-        private ToolStripMenuItem buscarProductoTSMenuItem;
-
+        
         private FormBuscProducto buscarProducto;
         private FormProducto producto;
         private FormNewCliente newCliente;
         private FormBuscCliente buscarCliente;
 
         private ConecDBmySql dataBase;
-        //public DataTable data_Descuento;
-        private DataTable data_iva;
         public DataTable tablaDescuento;
 
         private int id_Iva;
         private String id_empleado;
-        // private DataGridViewTextBoxColumn colcodigo;
         private ArrayList rowCliente;
-        private ArrayList descuento;
+        private double valorDescuento;
+        private double valorIva;
 
 
         #region Variables groupCliente
@@ -51,11 +43,20 @@ namespace WindowsFormsApplication1
         private TextBox txtRucCliente;
         private Button btNewCliente;
         private Button btBuscarNombre;
-        private Button btBuscarCI;
+        //private Button btBuscarCI;
         private Label lbNumeroFactura;
         private Label lbFactura;
         private Label lbVerFecha;
         private Label lbfecha;
+        #endregion
+
+        #region variables detalle factura
+        private DataGridView dataGVDetallesFact;
+        private ContextMenuStrip menuContextual;
+        private ToolStripMenuItem agregarProductoTSMenuItem;
+        private ToolStripMenuItem eliminarProductoTSMenuItem;
+        private ToolStripMenuItem editarProductoTSMenuItem;
+        private ToolStripMenuItem buscarProductoTSMenuItem;
         #endregion
 
         #region Variables infoFactura
@@ -79,7 +80,6 @@ namespace WindowsFormsApplication1
             #region inicializacion de Objetos
             this.dataBase = DataBase;
             //this.data_Descuento = new DataTable();
-            this.data_iva = new DataTable();
             this.pantalla = new Panel();
             this.groupCliente = new GroupBox();
             this.FuenteLeta = new Font(groupCliente.Font.Name, groupCliente.Font.Size, groupCliente.Font.Style);
@@ -140,7 +140,7 @@ namespace WindowsFormsApplication1
             this.lbRucCliente = new Label();
             this.txtRucCliente = new TextBox();
             this.btBuscarNombre = new Button();
-            this.btBuscarCI = new Button();
+            //this.btBuscarCI = new Button();
             this.btNewCliente = new Button();
             this.lbFactura = new Label();
             this.lbNumeroFactura = new Label();
@@ -159,7 +159,7 @@ namespace WindowsFormsApplication1
             this.groupCliente.Controls.Add(this.txtDirecCliente);
             this.groupCliente.Controls.Add(this.btNewCliente);
             this.groupCliente.Controls.Add(this.btBuscarNombre);
-            this.groupCliente.Controls.Add(this.btBuscarCI);
+            //this.groupCliente.Controls.Add(this.btBuscarCI);
             this.groupCliente.Controls.Add(this.lbfecha);
             this.groupCliente.Controls.Add(this.lbVerFecha);
             this.groupCliente.Controls.Add(this.lbNumeroFactura);
@@ -184,11 +184,11 @@ namespace WindowsFormsApplication1
             this.txtRucCliente.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCedula_KeyPress);
             this.txtRucCliente.MaxLength = 13;
 
-            this.btBuscarCI.Name = "btBuscarCI";
-            this.btBuscarCI.Text = "Buscar por Ruc o CI";
-            this.btBuscarCI.Location = new Point(this.txtRucCliente.Location.X + this.txtRucCliente.Size.Width + separacion, this.txtRucCliente.Location.Y);
-            this.btBuscarCI.Size = new Size(anchoBotones, altoObjetos);
-            this.btBuscarCI.BackColor = Color.White;
+            //this.btBuscarCI.Name = "btBuscarCI";
+            //this.btBuscarCI.Text = "Buscar por Ruc o CI";
+            //this.btBuscarCI.Location = new Point(this.txtRucCliente.Location.X + this.txtRucCliente.Size.Width + separacion, this.txtRucCliente.Location.Y);
+            //this.btBuscarCI.Size = new Size(anchoBotones, altoObjetos);
+            //this.btBuscarCI.BackColor = Color.White;
 
             this.lbNomCliente.Name = "lbNomCliente";
             this.lbNomCliente.Text = "Nombre:";
@@ -224,7 +224,7 @@ namespace WindowsFormsApplication1
 
             this.lbDirecCliente.Name = "lbDirecCliente";
             this.lbDirecCliente.Text = "Direccion:";
-            this.lbDirecCliente.Location = new Point(this.btBuscarCI.Location.X + this.btBuscarCI.Size.Width + separacion, marge);
+            this.lbDirecCliente.Location = new Point(this.txtRucCliente.Location.X + this.txtRucCliente.Size.Width + separacion, marge);
             this.lbDirecCliente.Size = new Size(anchoLabel, altoObjetos);
             this.txtDirecCliente.Name = "txtDirecCliente";
             this.txtDirecCliente.Location = new Point(this.lbDirecCliente.Location.X + this.lbDirecCliente.Size.Width + separacion, this.lbDirecCliente.Location.Y - 4);
@@ -394,39 +394,32 @@ namespace WindowsFormsApplication1
 
             #region Configuracion Objetos
 
-            int margenIF = 10;
             float tamañoLetraIF= this.FuenteLeta.Size + 4.0f;
-            int separacionIF = 10;
 
             this.lb_subTotal.Name = "lbRucCliente";
             this.lb_subTotal.Text = "SubTotal: $";
-            this.lb_subTotal.Location = new Point(margenIF, margenIF);
             this.lb_subTotal.AutoSize = true;
             this.lb_subTotal.Font = new Font(this.FuenteLeta.Name, tamañoLetraIF, FontStyle.Regular);
 
             this.lb_valorSubTotal.Name = "lb_valorSubTotal";
             this.lb_valorSubTotal.Text = "0.00";
-            this.lb_valorSubTotal.Location = new Point(this.lb_subTotal.Location.X + this.lb_subTotal.Size.Width, margenIF);
             this.lb_valorSubTotal.AutoSize = true;
             this.lb_valorSubTotal.ForeColor = Color.DarkBlue;
             this.lb_valorSubTotal.Font = this.lb_subTotal.Font;
 
             this.lb_descuento.Name = "lb_descuento";
             this.lb_descuento.Text = "Descuento: $";
-            this.lb_descuento.Location = new Point(this.lb_valorSubTotal.Location.X + this.lb_valorSubTotal.Size.Width + separacionIF, margenIF);
             this.lb_descuento.AutoSize = true;
             this.lb_descuento.Font = this.lb_subTotal.Font;
 
             this.lb_valorDescuento.Name = "lb_valorDescuento";
             this.lb_valorDescuento.Text = "0.00";
-            this.lb_valorDescuento.Location = new Point(this.lb_descuento.Location.X + this.lb_descuento.Size.Width, margenIF);
             this.lb_valorDescuento.AutoSize = true;
             this.lb_valorDescuento.ForeColor = Color.DarkBlue;
             this.lb_valorDescuento.Font = this.lb_subTotal.Font;
 
             this.txtDescuento.Name = "txtDescuento";
             this.txtDescuento.Text = "0%";
-            this.txtDescuento.Location = new Point(this.lb_valorDescuento.Location.X + this.lb_valorDescuento.Size.Width + separacionIF, margenIF - 4);
             this.txtDescuento.AutoSize = true;
             this.txtDescuento.ForeColor = Color.DarkBlue;
             this.txtDescuento.Font = this.lb_subTotal.Font;
@@ -435,13 +428,11 @@ namespace WindowsFormsApplication1
 
             this.lb_iva.Name = "lb_iva";
             this.lb_iva.Text = "Iva ";
-            this.lb_iva.Location = new Point(this.txtDescuento.Location.X + this.txtDescuento.Size.Width + separacionIF, margenIF);
             this.lb_iva.AutoSize = true;
             this.lb_iva.Font = this.lb_subTotal.Font;
 
             this.lb_valorIva.Name = "lb_valorIva";
             this.lb_valorIva.Text = "0.00";
-            this.lb_valorIva.Location = new Point(this.lb_iva.Location.X + this.lb_iva.Size.Width, margenIF);
             this.lb_valorIva.AutoSize = true;
             this.lb_valorIva.ForeColor = Color.DarkBlue;
             this.lb_valorIva.Font = this.lb_subTotal.Font;
@@ -449,13 +440,11 @@ namespace WindowsFormsApplication1
 
             this.lb_total.Name = "lb_total";
             this.lb_total.Text = "Total: $";
-            this.lb_total.Location = new Point(this.lb_subTotal.Location.X + this.lb_subTotal.Size.Width + separacionIF, this.lb_subTotal.Location.Y + this.lb_subTotal.Size.Height + separacionIF);
             this.lb_total.AutoSize = true;
             this.lb_total.Font = new Font (this.FuenteLeta.FontFamily,this.FuenteLeta.Size+20f,FontStyle.Bold,this.FuenteLeta.Unit);
 
             this.lb_valorTotal.Name = "lb_valorTotal";
             this.lb_valorTotal.Text = "0.00";
-            this.lb_valorTotal.Location = new Point(this.lb_total.Location.X + this.lb_total.Size.Width, this.lb_total.Location.Y);
             this.lb_valorTotal.AutoSize = true;
             this.lb_valorTotal.ForeColor = Color.DarkBlue;
             this.lb_valorTotal.Font = this.lb_total.Font;
@@ -465,21 +454,60 @@ namespace WindowsFormsApplication1
             this.lb_nombreEmpreado.AutoSize = true;
             this.lb_nombreEmpreado.ForeColor = Color.DarkSlateBlue;
             this.lb_nombreEmpreado.Font = new Font(this.FuenteLeta.Name, tamañoLetraIF+20f, FontStyle.Bold);
-            this.lb_nombreEmpreado.Location = new Point(this.lb_valorIva.Location.X + this.lb_valorIva.Size.Width + separacionIF, this.infoFactura.Size.Height/2);
 
             this.bt_imprimir.Name = "bt_imprimir";
             this.bt_imprimir.Text = "Imprimir";
-            this.bt_imprimir.Size = new Size(150, (this.infoFactura.Size.Height - separacionIF) - separacionIF);
             this.bt_imprimir.Font = new Font(this.FuenteLeta.Name, tamañoLetraIF + 10f, FontStyle.Bold);
-            this.bt_imprimir.Location = new Point((this.infoFactura.Size.Width - this.bt_imprimir.Size.Width) - separacionIF, separacionIF);
             this.bt_imprimir.BackColor = Color.White;
+
+            getPoinInfoFactu();
             #endregion
 
 
             #endregion
 
         }
+        private void getPoinInfoFactu()
+        {
+            int margenIF = 10;
+            int separacionIF = 10;
 
+            this.lb_subTotal.Location = new Point(margenIF, margenIF);
+            this.lb_valorSubTotal.Location = new Point(this.lb_subTotal.Location.X + this.lb_subTotal.Size.Width, margenIF);
+            this.lb_descuento.Location = new Point(this.lb_valorSubTotal.Location.X + this.lb_valorSubTotal.Size.Width + separacionIF, margenIF);
+            this.lb_valorDescuento.Location = new Point(this.lb_descuento.Location.X + this.lb_descuento.Size.Width, margenIF);
+            this.txtDescuento.Location = new Point(this.lb_valorDescuento.Location.X + this.lb_valorDescuento.Size.Width + separacionIF, margenIF - 4);
+            this.lb_iva.Location = new Point(this.txtDescuento.Location.X + this.txtDescuento.Size.Width + separacionIF, margenIF);
+            this.lb_valorIva.Location = new Point(this.lb_iva.Location.X + this.lb_iva.Size.Width, margenIF);
+            this.lb_total.Location = new Point(this.lb_subTotal.Location.X + this.lb_subTotal.Size.Width + separacionIF, this.lb_subTotal.Location.Y + this.lb_subTotal.Size.Height + separacionIF);
+            this.lb_valorTotal.Location = new Point(this.lb_total.Location.X + this.lb_total.Size.Width, this.lb_total.Location.Y);
+
+            this.lb_nombreEmpreado.Location = new Point(this.lb_valorIva.Location.X + this.lb_valorIva.Size.Width + separacionIF, 18);
+            this.bt_imprimir.Size = new Size(150, (this.infoFactura.Size.Height - separacionIF) - separacionIF);
+            this.bt_imprimir.Location = new Point((this.infoFactura.Size.Width - this.bt_imprimir.Size.Width) - separacionIF, separacionIF);
+
+        }
+
+        #region Funciones del detalle factura
+        private void dataGridView1_MouseClick(object sender, MouseEventArgs e)
+        {
+            int positionMouseRow = this.dataGVDetallesFact.HitTest(e.X, e.Y).RowIndex;
+            if (e.Button == MouseButtons.Right && positionMouseRow > -1 /*&& !(e.RowIndex == this.dataGVDetallesFact.RowCount - 1)*/)
+            {
+                //para poner todos las Filas(rows) en Falso para evitar una una fila no selecionada 
+                foreach (DataGridViewRow dr in this.dataGVDetallesFact.SelectedRows)
+                { dr.Selected = false; }
+
+                // Para seleccionar
+
+                dataGVDetallesFact.Rows[positionMouseRow].Selected = true;
+
+                // Para mostrar el menú
+
+                this.menuContextual.Show(this.dataGVDetallesFact, new Point(e.X, e.Y));
+
+            }
+        }
         private void editarProductoTSMenuItem_Click(object sender, EventArgs e)
         {
             int numFila = 0;
@@ -497,7 +525,7 @@ namespace WindowsFormsApplication1
                 }
                 else { numFila++; }
             }
-
+            sumarProducValorT();
         }
 
         private void agregarProductoTSMenuItem_Click(object sender, EventArgs e)
@@ -507,6 +535,7 @@ namespace WindowsFormsApplication1
 
             if (this.producto.aceptado)
             { this.dataGVDetallesFact.Rows.Add(this.producto.getDatos().ToArray()); }
+            sumarProducValorT();
         }
 
         private void buscarProductoTSMenuItem_Click(object sender, EventArgs e)
@@ -521,6 +550,7 @@ namespace WindowsFormsApplication1
                 if (this.producto.aceptado)
                 { this.dataGVDetallesFact.Rows.Add(this.producto.getDatos().ToArray()); }
             }
+            sumarProducValorT();
         }
 
         private void eliminarProductoTSMenuItem_Click(object sender, EventArgs e)
@@ -538,15 +568,31 @@ namespace WindowsFormsApplication1
             }
             if (rowToDelete > -1)
             { this.dataGVDetallesFact.Rows.RemoveAt(rowToDelete);}
-
+            sumarProducValorT();
         }
 
+        #endregion
+
+        private void sumarProducValorT()
+        {
+            double subtotal = 0f;
+            foreach (DataGridViewRow dr in this.dataGVDetallesFact.Rows)
+            { subtotal += Convert.ToDouble(dr.Cells["precioTotal"].Value); }
+
+            this.lb_valorSubTotal.Text = subtotal.ToString();
+            double tem = subtotal * this.valorDescuento;
+            this.lb_valorDescuento.Text = tem.ToString();
+            tem = subtotal * this.valorIva;
+            this.lb_valorIva.Text = tem.ToString();
+            getPoinInfoFactu();
+        }
 
         private void btImprimir_Click(object sender, EventArgs e)
         {
 
         }
 
+        #region Funciones datos del Cliente
         private void btBuscarCliente_Click(object sender, EventArgs e)
         {
             this.buscarCliente.ShowDialog();
@@ -576,7 +622,7 @@ namespace WindowsFormsApplication1
                 e.Handled = false; //Se acepta (todo OK)
                 if (tem != "")
                 {
-                    //llenarDGV(tem);
+                    GetDataCliente(tem);
                 }
             }
             else if (Char.IsControl(e.KeyChar))//Al pulsar teclas como Borrar y eso.
@@ -591,7 +637,7 @@ namespace WindowsFormsApplication1
                 }
                 if (tem.Length != 0)
                 {
-                    //llenarDGV(tem);
+                    GetDataCliente(tem);
                 }
             }
             else//Para todo lo demas
@@ -600,88 +646,37 @@ namespace WindowsFormsApplication1
             }
         }
 
-        private void llenarTxt(String Buscar)
+        private void GetDataCliente(String Buscar)
         {
-            this.rowCliente = new ArrayList();
-            //this.txtCodigio.Enabled = true;
-            //this.txtCodigio.ReadOnly = false;
-            //this.aceptado = false;
-            String comando = "SELECT id_bodegaProdutos as Codigo, cantidad as Cantidad,nombre as Nombre,precioVentPubli as PrecioUnitario " +
-                          "FROM abc_barcelona.tb_cliente WHERE id_bodegaProdutos = " + Buscar + ";";
+            int i = Buscar.ToCharArray().Length;
+            if (i == 10 || i == 13)
+            {
+                //      0                   1               2               3                   4           5           6               7               8
+                //(`id_cedulaClient`, `nomCliente`, `fechaNacimiento`, `CelularCliente`, `fonoCliente`, `cuidad`, `direcCliente`, `emailCliente`, `id_descuento`)
+                String comando = "SELECT * FROM abc_barcelona.tb_cliente WHERE id_cedulaClient = " + Buscar + ";";
+                this.rowCliente = this.dataBase.getRow(comando);
+                if (this.rowCliente.Count > 0)
+                {
+                    llenarTextboxDataCliente();
+                }
+            }
+        }
+
+        private void llenarTextboxDataCliente()
+        {
+            this.txtNomCliente.Text = this.rowCliente[1].ToString();
+            this.txtFonoCliente.Text = this.rowCliente[3].ToString() + "   " + this.rowCliente[4].ToString();
+            this.txtDirecCliente.Text = this.rowCliente[5].ToString() + "   " + this.rowCliente[6].ToString();
+            String comando = "SELECT `descuento%` FROM abc_barcelona.tb_descuento WHERE id_descuento = " + this.rowCliente[8].ToString() + ";";
             ArrayList row = this.dataBase.getRow(comando);
-            if (row.Count > 0)
-            {
-                //llegarTextBox(row, false);
-            }
-
+            this.valorDescuento = Convert.ToDouble(row[0]);
+            if (this.valorDescuento != 0f)
+            { this.valorDescuento = this.valorDescuento / 100; }
+            this.txtDescuento.Text = row[0].ToString() + "%";
+             
         }
+        #endregion
 
-
-        private void TxtNumero_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            char s = e.KeyChar;
-            if (Char.IsNumber(e.KeyChar))//Al pulsar una numero
-            {
-                e.Handled = false;//Se acepta (todo OK)
-            }
-            else if (Char.IsControl(e.KeyChar))//Al pulsar teclas como Borrar y eso.
-            {
-                e.Handled = false;//Se acepta (todo OK)
-            }
-            //else if (Char.IsSeparator(e.KeyChar))//Al pulsar teclas como Espaarador y Espacio
-            //{
-            //    e.Handled = false;//Se acepta (todo OK)
-            //}
-            else//Para todo lo demas
-            {
-                e.Handled = true;//No se acepta (si pulsas cualquier otra cosa pues no se envia)
-            }
-        }
-
-        private void TxtLetras_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (Char.IsLetter(e.KeyChar))//Al pulsar una letra
-            {
-                e.Handled = false;//Se acepta (todo OK)
-            }
-            else if (Char.IsControl(e.KeyChar))//Al pulsar teclas como Borrar y eso.
-            {
-                e.Handled = false;//Se acepta (todo OK)
-            }
-            else if (Char.IsSeparator(e.KeyChar))//Al pulsar teclas como Espaarador y Espacio
-            {
-                e.Handled = false;//Se acepta (todo OK)
-            }
-            else//Para todo lo demas
-            {
-                e.Handled = true;//No se acepta (si pulsas cualquier otra cosa pues no se envia)
-            }
-        }
-
-
-        //private void dataGridView1_CellClick(object sender, DataGridViewCellMouseEventArgs e)
-
-        private void dataGridView1_MouseClick(object sender, MouseEventArgs e)
-
-        {
-            int positionMouseRow = this.dataGVDetallesFact.HitTest(e.X, e.Y).RowIndex;
-            if (e.Button == MouseButtons.Right && positionMouseRow > -1 /*&& !(e.RowIndex == this.dataGVDetallesFact.RowCount - 1)*/)
-            {
-                //para poner todos las Filas(rows) en Falso para evitar una una fila no selecionada 
-                foreach (DataGridViewRow dr in this.dataGVDetallesFact.SelectedRows)
-                { dr.Selected = false; }
-
-                // Para seleccionar
-
-                dataGVDetallesFact.Rows[positionMouseRow].Selected = true;
-
-                // Para mostrar el menú
-
-                this.menuContextual.Show(this.dataGVDetallesFact,new Point(e.X,e.Y));
-                
-            }
-
-        }
 
         public void VerPantallaFacturacion(DataTable Empleado)
         {
@@ -689,8 +684,10 @@ namespace WindowsFormsApplication1
             //String consulta = "SELECT id_descuento,`descuento%` as Descuento,descuentoDecimal FROM abc_barcelona.tb_descuento;";
             //this.cb_listDescuento.DataSource = this.dataBase.getColumnString(consulta, this.data_Descuento, "Descuento");
 
-            String consulta1 = "SELECT id_iva,`iva%` as Iva,ivaDecimal FROM abc_barcelona.tb_iva where valido = true;";
-            this.dataBase.GetDataTabla(consulta1, this.data_iva);
+            String consulta1 = "SELECT id_iva,`iva%` as Iva FROM abc_barcelona.tb_iva where valido = true;";
+            DataTable data_iva = new DataTable();
+
+            this.dataBase.GetDataTabla(consulta1, data_iva);
 
             int i = 1;
             foreach (DataRow row in data_iva.Rows)
@@ -698,7 +695,9 @@ namespace WindowsFormsApplication1
                     if (i == data_iva.Rows.Count)
                     {
                         this.id_Iva = (int)row["id_iva"];
-                        this.lb_iva.Text = this.lb_iva.Text + row["Iva"].ToString() + ": $";
+                    
+                        this.valorIva = Convert.ToDouble(row["Iva"])/100;
+                        this.lb_iva.Text = this.lb_iva.Text + row["Iva"].ToString() + "%: $";
                         break;
                     }
                 i = i + 1;

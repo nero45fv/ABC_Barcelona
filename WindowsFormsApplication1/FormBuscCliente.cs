@@ -28,34 +28,27 @@ namespace WindowsFormsApplication1
             if (this.dgv_productos.Columns.Count.Equals(0))
 
             {
-                DataGridViewTextBoxColumn idProdu = new DataGridViewTextBoxColumn();
-                idProdu.HeaderText = "Codigo";
-                idProdu.Name = "id_bodegaProdutos";
-                idProdu.Width = 50;
-                idProdu.ReadOnly = true;
+                DataGridViewTextBoxColumn cedula = new DataGridViewTextBoxColumn();
+                cedula.HeaderText = "Cedula";
+                cedula.Name = "cedula";
+                cedula.Width = 100;
+                cedula.ReadOnly = true;
+                
+                DataGridViewTextBoxColumn ciudad = new DataGridViewTextBoxColumn();
+                ciudad.HeaderText = "Ciudad";
+                ciudad.Name = "ciudad";
+                ciudad.Width = 175;
+                ciudad.ReadOnly = true;
 
-                DataGridViewTextBoxColumn CantidaProdu = new DataGridViewTextBoxColumn();
-                CantidaProdu.HeaderText = "Cantidad";
-                CantidaProdu.Name = "cantiBodega";
-                CantidaProdu.Width = 50;
-                CantidaProdu.ReadOnly = true;
+                DataGridViewTextBoxColumn nombreCliente = new DataGridViewTextBoxColumn();
+                nombreCliente.HeaderText = "Nombre";
+                nombreCliente.Name = "nombre";
+                nombreCliente.Width = dgv_productos.Size.Width - cedula.Width - ciudad.Width;
+                nombreCliente.ReadOnly = true;
 
-                DataGridViewTextBoxColumn PrecioUProdu = new DataGridViewTextBoxColumn();
-                PrecioUProdu.HeaderText = "Precio Unitario";
-                PrecioUProdu.Name = "precioUnitario";
-                PrecioUProdu.Width = 175;
-                PrecioUProdu.ReadOnly = true;
-
-                DataGridViewTextBoxColumn nombreProdu = new DataGridViewTextBoxColumn();
-                nombreProdu.HeaderText = "Producto";
-                nombreProdu.Name = "nombre";
-                nombreProdu.Width = dgv_productos.Size.Width - idProdu.Width - CantidaProdu.Width - PrecioUProdu.Width;
-                nombreProdu.ReadOnly = true;
-
-                dgv_productos.Columns.Add(idProdu);
-                dgv_productos.Columns.Add(CantidaProdu);
-                dgv_productos.Columns.Add(nombreProdu);
-                dgv_productos.Columns.Add(PrecioUProdu);
+                dgv_productos.Columns.Add(cedula);
+                dgv_productos.Columns.Add(nombreCliente);
+                dgv_productos.Columns.Add(ciudad);
             }
             #endregion
         }
@@ -68,21 +61,11 @@ namespace WindowsFormsApplication1
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (Char.IsNumber(e.KeyChar))//Al pulsar una numero
-            {
-                String tem = this.textBox1.Text + e.KeyChar;
-                e.Handled = false; //Se acepta (todo OK)
-                this.textBox1.MaxLength = 50;
-                if (tem != "")
-                { llenarDGV(tem); }
-                
-            }
-            else if (Char.IsControl(e.KeyChar))//Al pulsar teclas como Borrar y eso.
+             if (Char.IsControl(e.KeyChar))//Al pulsar teclas como Borrar y eso.
             {
                 String tem = "";
                 e.Handled = false; //Se acepta (todo OK)
                 Char[] ArrayTemp = this.textBox1.Text.ToCharArray();
-                this.textBox1.MaxLength = 50;
                 for (int i = 0; i < ArrayTemp.Length - 1; i++)
                 {
                     tem = tem + ArrayTemp[i];
@@ -94,7 +77,6 @@ namespace WindowsFormsApplication1
             {
                 String tem = this.textBox1.Text + e.KeyChar;
                 e.Handled = false;//Se acepta (todo OK) 
-                this.textBox1.MaxLength = 50;
                 if (tem != "")
                 { llenarDGV(tem); }
             }
@@ -102,7 +84,6 @@ namespace WindowsFormsApplication1
             {
                 String tem = this.textBox1.Text + e.KeyChar;
                 e.Handled = false;//Se acepta (todo OK)
-                this.textBox1.MaxLength = 50;
                 if (tem != "")
                 { llenarDGV(tem); }
             }
@@ -114,7 +95,8 @@ namespace WindowsFormsApplication1
 
         private void llenarDGV(String Buscar)
         {
-           String comando = "SELECT * FROM abc_barcelona.tb_cliente WHERE nomCliente like '%" + Buscar + "%';";
+           String comando = "SELECT id_cedulaClient As Cedula,nomCliente As Nombre,cuidad" +
+                            " FROM abc_barcelona.tb_cliente WHERE nomCliente like '%" + Buscar + "%';";
 
             limpiarDGVProductos();
 
