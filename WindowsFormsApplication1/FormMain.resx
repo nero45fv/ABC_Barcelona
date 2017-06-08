@@ -121,65 +121,29 @@
     <value>17, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="facturaToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>124, 22</value>
-  </data>
-  <data name="facturaToolStripMenuItem.Text" xml:space="preserve">
-    <value>Factura</value>
-  </data>
-  <data name="proformaToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>124, 22</value>
-  </data>
-  <data name="proformaToolStripMenuItem.Text" xml:space="preserve">
-    <value>Proforma</value>
-  </data>
   <data name="facturacionToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>81, 20</value>
+    <value>170, 22</value>
   </data>
   <data name="facturacionToolStripMenuItem.Text" xml:space="preserve">
     <value>Facturacion</value>
   </data>
-  <data name="inventarioToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>127, 22</value>
+  <data name="proformaToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>170, 22</value>
   </data>
-  <data name="inventarioToolStripMenuItem.Text" xml:space="preserve">
-    <value>Inventario</value>
+  <data name="proformaToolStripMenuItem.Text" xml:space="preserve">
+    <value>Proforma</value>
   </data>
-  <data name="nuevoProveedorToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>166, 22</value>
+  <data name="facturarProformaToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>170, 22</value>
   </data>
-  <data name="nuevoProveedorToolStripMenuItem.Text" xml:space="preserve">
-    <value>Nuevo Proveedor</value>
+  <data name="facturarProformaToolStripMenuItem.Text" xml:space="preserve">
+    <value>Facturar Proforma</value>
   </data>
-  <data name="facturaCompraToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>166, 22</value>
+  <data name="toolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>53, 20</value>
   </data>
-  <data name="facturaCompraToolStripMenuItem.Text" xml:space="preserve">
-    <value>Factura Compra</value>
-  </data>
-  <data name="nuevoProductoToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>166, 22</value>
-  </data>
-  <data name="nuevoProductoToolStripMenuItem.Text" xml:space="preserve">
-    <value>Nuevo producto</value>
-  </data>
-  <data name="ingresosToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>127, 22</value>
-  </data>
-  <data name="ingresosToolStripMenuItem.Text" xml:space="preserve">
-    <value>Ingresos</value>
-  </data>
-  <data name="bodegaToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 20</value>
-  </data>
-  <data name="bodegaToolStripMenuItem.Text" xml:space="preserve">
-    <value>Bodega</value>
-  </data>
-  <data name="contabilidadToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>87, 20</value>
-  </data>
-  <data name="contabilidadToolStripMenuItem.Text" xml:space="preserve">
-    <value>Contabilidad</value>
+  <data name="toolStripMenuItem1.Text" xml:space="preserve">
+    <value>Ventas</value>
   </data>
   <data name="menuMain.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
@@ -781,16 +745,16 @@
   <data name="$this.Text" xml:space="preserve">
     <value>Estacion de Servicios ABC Barcelona</value>
   </data>
+  <data name="&gt;&gt;toolStripMenuItem1.Name" xml:space="preserve">
+    <value>toolStripMenuItem1</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItem1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;facturacionToolStripMenuItem.Name" xml:space="preserve">
     <value>facturacionToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;facturacionToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;facturaToolStripMenuItem.Name" xml:space="preserve">
-    <value>facturaToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;facturaToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;proformaToolStripMenuItem.Name" xml:space="preserve">
@@ -799,46 +763,10 @@
   <data name="&gt;&gt;proformaToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;bodegaToolStripMenuItem.Name" xml:space="preserve">
-    <value>bodegaToolStripMenuItem</value>
+  <data name="&gt;&gt;facturarProformaToolStripMenuItem.Name" xml:space="preserve">
+    <value>facturarProformaToolStripMenuItem</value>
   </data>
-  <data name="&gt;&gt;bodegaToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;inventarioToolStripMenuItem.Name" xml:space="preserve">
-    <value>inventarioToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;inventarioToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ingresosToolStripMenuItem.Name" xml:space="preserve">
-    <value>ingresosToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;ingresosToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;nuevoProveedorToolStripMenuItem.Name" xml:space="preserve">
-    <value>nuevoProveedorToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;nuevoProveedorToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;facturaCompraToolStripMenuItem.Name" xml:space="preserve">
-    <value>facturaCompraToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;facturaCompraToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;nuevoProductoToolStripMenuItem.Name" xml:space="preserve">
-    <value>nuevoProductoToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;nuevoProductoToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;contabilidadToolStripMenuItem.Name" xml:space="preserve">
-    <value>contabilidadToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;contabilidadToolStripMenuItem.Type" xml:space="preserve">
+  <data name="&gt;&gt;facturarProformaToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">

@@ -34,7 +34,7 @@ namespace WindowsFormsApplication1
             }
         }
 
-        public Boolean validarUser(TextBox user, TextBox password)
+        public Boolean validarUser(String user, String password)
         {
             Boolean valido = false;
             this.dataPermisos = new DataTable();
@@ -47,7 +47,7 @@ namespace WindowsFormsApplication1
                     //{
                         String User = row["User"].ToString();
                         String Clave = row["Clave"].ToString();
-                        if (Clave == password.Text && User == user.Text)
+                        if (Clave == password && User == user)
                         {
                         String consulta = "select titulo as Titulo,bodega,facturacion,contabilidad,master,configuracion " +
                          "from tb_previlegios where "+ row["id_privilegios"].ToString() + " = tb_previlegios.id_previlegios;";

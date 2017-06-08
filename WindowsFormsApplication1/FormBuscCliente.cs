@@ -138,9 +138,10 @@ namespace WindowsFormsApplication1
 
             if (e.RowIndex > -1&& !(e.RowIndex==this.dgv_productos.RowCount-1) )
             {
-                String comando = "SELECT * FROM abc_barcelona.tb_cliente WHERE nomCliente like '%" + dgv_productos.Rows[e.RowIndex].Cells[0].Value + "%';";
+                String comando = "SELECT * FROM abc_barcelona.tb_cliente WHERE id_cedulaClient = " + dgv_productos.Rows[e.RowIndex].Cells[0].Value + ";";
                 this.dataCliente = this.DataBase.getRow(comando);
-
+                this.textBox1.Text = "";
+                limpiarDGVProductos();
                 this.Hide();
                 this.producEncotrado = true;
             }

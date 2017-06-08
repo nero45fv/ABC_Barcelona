@@ -8,11 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Printing;
-using System.IO;
 
 namespace WindowsFormsApplication1
 {
-    class Facturacion
+    class Proforma
     {
         private Panel pantalla;
         private Panel infoFactura;
@@ -78,14 +77,10 @@ namespace WindowsFormsApplication1
         private Label lb_total;
         private Label lb_valorTotal;
         private Button bt_imprimir;
-
-       
-        
         #endregion
 
-        public Facturacion(Panel Pantalla, ConecDBmySql DataBase,Point ubicacion, Size tamaño)
+        public Proforma(Panel Pantalla, ConecDBmySql DataBase,Point ubicacion, Size tamaño)
         {
-           
 
             #region inicializacion de Objetos
             this.dataBase = DataBase;
@@ -263,7 +258,7 @@ namespace WindowsFormsApplication1
             this.lbVerFecha.ForeColor = Color.Blue;
 
             this.lbFactura.Name = "lbFactura";
-            this.lbFactura.Text = "N° Factura:";
+            this.lbFactura.Text = "N° Proforma:";
             this.lbFactura.Font = new Font(this.FuenteLeta.Name, tamañoFontSize, FontStyle.Bold);
             this.lbFactura.Location = new Point(this.lbVerFecha.Location.X + this.lbVerFecha.Size.Width + separacion, poinYfecha);
             this.lbFactura.Size = new Size(160, this.lbfecha.Size.Height + 3);
@@ -496,7 +491,6 @@ namespace WindowsFormsApplication1
             this.bt_imprimir.Location = new Point((this.infoFactura.Size.Width - this.bt_imprimir.Size.Width) - separacionIF, separacionIF);
 
         }
-
 
         #region Funciones datos del Cliente
         private void btBuscarCliente_Click(object sender, EventArgs e)
@@ -749,7 +743,6 @@ namespace WindowsFormsApplication1
 
         private void btImprimir_Click(object sender, EventArgs e)
         {
-            //this.factura.p = PaperKind.A5;
             this.verFactu.Document = this.factura;
             this.verFactu.ShowDialog(); 
         }
@@ -759,52 +752,12 @@ namespace WindowsFormsApplication1
             //Bitmap bmp = Properties.Resources.images;
             //Image fondo = bmp;
             //e.Graphics.DrawImage(fondo, 0, 0, fondo.Width, fondo.Height);
-            //e.PageSettings.PaperSize = new PaperSize("factura", 100, e.PageSettings.PaperSize.Height);
-            //e.PageSettings.PaperSize.Kind = PaperKind.A5;
             e.Graphics.DrawString("Hola mundo",this.FuenteLeta,Brushes.Black,new Point(50,50));
 
         }
-
-
-        void PrintDocument1PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
-        {
-            // variables utilizadas para establecer los ajustes de impresión
-            float linhasPorPagina = 0;
-            float yPosicao = 0;
-            int contador = 0;
-            float margemEsquerda = e.MarginBounds.Left;
-            float margemSuperior = e.MarginBounds.Top;
-            string línea = null;
-            Font fonteImpressao = this.FuenteLeta;
-            SolidBrush mCaneta = new SolidBrush(Color.Black);
-
-            // Establecer el número de líneas por página, usando MarginBounds.
-            linhasPorPagina = e.MarginBounds.Height / fonteImpressao.GetHeight(e.Graphics);
-
-            // Iterar sobre la cadena mediante StringReader, la impresión de cada línea
-            while (contador < linhasPorPagina && ((línea = "leitor.ReadLine()") != null))
-            {
-                // calcular la posición de la siguiente línea basada
-                // en el momento de alimentación de acuerdo con el dispositivo de impresión
-                yPosicao = margemSuperior + (contador * fonteImpressao.GetHeight(e.Graphics));
-
-                // dibujar la línea siguiente en el control RichTextBox
-                e.Graphics.DrawString(línea, fonteImpressao, mCaneta, margemEsquerda, yPosicao, new StringFormat());
-                contador++;
-            }
-            // Comprobar si hay más filas para imprimir
-            if (línea != null)
-                e.HasMorePages = true;
-            else
-                e.HasMorePages = false;
-
-            // liberación de recursos	
-            mCaneta.Dispose();
-        }
         
 
-
-        public void VerPantallaFacturacion(DataTable Empleado)
+        public void VerPantallaProforma(DataTable Empleado)
         {
             
             //String consulta = "SELECT id_descuento,`descuento%` as Descuento,descuentoDecimal FROM abc_barcelona.tb_descuento;";
@@ -814,6 +767,7 @@ namespace WindowsFormsApplication1
             DataTable data_iva = new DataTable();
 
             this.dataBase.GetDataTabla(consulta1, data_iva);
+
             if (this.dataBase.Error == null)
             {
                 this.Activo = true;
@@ -844,10 +798,10 @@ namespace WindowsFormsApplication1
                 getPoinInfoFactu();
                 pantalla.Show();
             }
-            
+           
         }
 
-        public void OcultarPantallaFacturacion()
+        public void OcultarPantallaProforma()
         {
             this.Activo = false;
             pantalla.Hide();

@@ -21,6 +21,7 @@ namespace WindowsFormsApplication1
         { get; set; }
 
         internal Facturacion Factu;
+        internal Proforma Proform;
         //internal FormFactuacion Factu
         //{ get;set; }
 
@@ -48,13 +49,26 @@ namespace WindowsFormsApplication1
             //this.Factu.DataBase = this.DataBase;
             //this.Factu.reConfigura(new Point(5, 5 + menuMain.Size.Height), new Size(panelMain.Size.Width - 12, (panelMain.Size.Height - menuMain.Size.Height) - 12));
             Factu = new Facturacion(this.panelMain, this.DataBase, new Point(5, 5 + menuMain.Size.Height), new Size(panelMain.Size.Width - 12, (panelMain.Size.Height - menuMain.Size.Height) - 12));
+            Proform = new Proforma(this.panelMain, this.DataBase, new Point(5, 5 + menuMain.Size.Height), new Size(panelMain.Size.Width - 12, (panelMain.Size.Height - menuMain.Size.Height) - 12));
 
         }
-
-
-        private void facturaToolStripMenuItem_Click(object sender, EventArgs e)
+        
+       
+        private void facturarProformaToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            this.user.entrarA("facturacion");
+            this.user.entrarA("faturarProforma", "facturacion");
+            this.user.ShowDialog();
+        }
+
+        private void proformaToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            this.user.entrarA("proforma","facturacion");
+            this.user.ShowDialog();
+        }
+
+        private void facturacionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.user.entrarA("factura","facturacion");
             this.user.ShowDialog();
         }
     }

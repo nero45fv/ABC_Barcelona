@@ -193,6 +193,8 @@ namespace WindowsFormsApplication1
                 //this.dataProduc.cantidad = (int)dgv_productos.Rows[e.RowIndex].Cells["Cantidad"].Value;
                 //this.dataProduc.nombre =dgv_productos.Rows[e.RowIndex].Cells["Nombre"].Value.ToString();
                 //this.dataProduc.precioU = (float)dgv_productos.Rows[e.RowIndex].Cells["PrecioUnitario"].Value;
+                this.textBox1.Text = "";
+                limpiarDGVProductos();
                 this.Hide();
                 this.producEncotrado = true;
             }

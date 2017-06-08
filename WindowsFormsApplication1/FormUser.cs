@@ -15,6 +15,7 @@ namespace WindowsFormsApplication1
         private FormMain Main;
         private ConecDBmySql DataBase;
         private User user;
+        private String Rol;
         private String AccederA;
 
         public FormUser()
@@ -45,6 +46,7 @@ namespace WindowsFormsApplication1
 
         private void FormUser_Load(object sender, EventArgs e)
         {
+            //this.txtUser.Focused = true;
             
         }
 
@@ -54,45 +56,72 @@ namespace WindowsFormsApplication1
             //this.Main.Enabled = true;
         }
 
-        public void entrarA(String Acceder)
+        public void entrarA(String Acceder,string rol)
         {
+            this.Rol = rol;
             this.AccederA = Acceder;
 
-            if (this.AccederA == "facturacion")
+            if (this.Rol == "facturacion")
             {
-                this.Main.Factu.OcultarPantallaFacturacion();
+               if (this.Main.Factu.Activo)
+                { this.Main.Factu.OcultarPantallaFacturacion(); }
+                if (this.Main.Proform.Activo)
+                { this.Main.Proform.OcultarPantallaProforma(); }
             }
-            
-            
+
         }
 
         private void btEntrar_Click(object sender, EventArgs e)
         {
-            if(this.user.validarUser(this.txtUser, this.txtPassword))
+            if(this.user.validarUser(this.txtUser.Text, this.txtPassword.Text))
             {
                 this.txtPassword.Text = "";
                 this.txtUser.Text = "";
-                if (this.user.validarAcceso(this.AccederA))
+                if (this.user.validarAcceso(this.Rol))
                 {
-                    if (this.AccederA == "facturacion")
+                    switch (this.Rol)
                     {
-                        this.Main.Factu.VerPantallaFacturacion(this.user.dataEmpleado);
-                    }
-                    else if(this.AccederA == "bodega")
-                    {
-                        //this.Main.Factu.VerPantallaFacturacion();
-                    }
-                    else if (this.AccederA == "contabilidad")
-                    {
-                        //this.Main.Factu.VerPantallaFacturacion();
-                    }
-                    else if (this.AccederA == "master")
-                    {
-                        this.Main.AccesoTotal = true;
-                    }
-                    else if (this.AccederA == "configuracion")
-                    {
-                        //this.Main.Factu.VerPantallaFacturacion();
+                        case "master":
+                            this.Main.AccesoTotal = true;
+                            break;
+                        case "facturacion":
+                            switch (this.AccederA)
+                            {
+                                case "factura":
+                                    this.Main.Factu.VerPantallaFacturacion(this.user.dataEmpleado);
+                                    break;
+                                case "proforma":
+                                    this.Main.Proform.VerPantallaProforma(this.user.dataEmpleado);
+                                    break;
+                                case "faturarProforma":
+                                    //this.Main.Factu.VerPantallaFacturacion(this.user.dataEmpleado);
+                                    break;
+                            }
+                            break;
+                        case "bodega":
+                            switch (this.AccederA)
+                            {
+                                //case "factura":
+                                //    this.Main.Factu.VerPantallaFacturacion(this.user.dataEmpleado);
+                                //    break;
+                            }
+                            break;
+                        case "contabilidad":
+                            switch (this.AccederA)
+                            {
+                                //case "factura":
+                                //    this.Main.Factu.VerPantallaFacturacion(this.user.dataEmpleado);
+                                //    break;
+                            }
+                            break;
+                        case "configuracion":
+                            switch (this.AccederA)
+                            {
+                                //case "factura":
+                                //    this.Main.Factu.VerPantallaFacturacion(this.user.dataEmpleado);
+                                //    break;
+                            }
+                            break;
                     }
 
                     this.Hide();
